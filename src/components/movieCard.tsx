@@ -39,20 +39,23 @@ function MovieCard({ movie }: { movie: Movie }) {
 
     // JSX
     return (
-        <div className="col-lg-2 mb-4">
-            <div className="card">
-                <img src={posterBasePath + movie.poster_path} className="card-img-top" alt="..." />
-                <div className="card-body">
-                    <h5 className="card-title "><span>{movie.title.substring(0, 200)}</span></h5>
-                    <span className="far fa-star" aria-hidden="true"></span><span className="ml-1">{movie.vote_average}</span>
-                    <p className="card-text">{movie.overview.substring(0, 125).concat('....')}</p>
-                    <div className="d-flex justify-content-between p-0">
-                        <span className="far fa-calendar" aria-hidden="true"> {movie.release_date}</span>
-                        <span className="far fa-play-circle play-icon" onClick={handlePlayTrailer}></span>
+        <div className="grid grid-cols-4">
+            <div className="max-w-sm rounded overflow-hidden shadow-lg">
+                <div className="px-6 py-4">
+                    <img src={posterBasePath + movie.poster_path} className="" alt="..." />
+                    <div className="">
+                        <h5 className="font-bold text-xl mb-2"><span>{movie.title.substring(0, 200)}</span></h5>
+                        <span className="far fa-star" aria-hidden="true"></span><span className="ml-1">{movie.vote_average}</span>
+                        <p>{movie.overview.substring(0, 125).concat('....')}</p>
+                        <div className="d-flex justify-content-between p-0">
+                            <span className="far fa-calendar" aria-hidden="true"> {movie.release_date}</span>
+                            <span className="far fa-play-circle play-icon" onClick={handlePlayTrailer}></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        
     );
 }
 

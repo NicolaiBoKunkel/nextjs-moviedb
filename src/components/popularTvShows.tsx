@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from "react";
+import { getPopularTvShows } from "@/store/apis/movieApi";
 import TvCard from "./tvCard";
 
 interface Tv {
@@ -11,35 +12,29 @@ interface Tv {
     first_air_date: string;
 }
 
-const TvList = () => { // component name to TvList
-    const [tvShows, setTvShows] = useState<Tv[]>([]); // variable names
+const PopularTvShows = () => {
+    const [tvShows, setTvShows] = useState<Tv[]>([]);
 
     useEffect(() => {
-        fetchTvShows(); // Call fetchTvShows 
+        fetchTvShows();
     }, []);
 
-    const fetchTvShows = async () => { // function name
-        try {
-            const apiKey = 'e46278258cc52ec12ec6d0d0582c89b7';
-            const response = await fetch(
-                `https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}&language=en-US&page=1` // Fetch popular TV shows
-            );
-            const data = await response.json();
-            if (data.results) {
-                setTvShows(data.results);
-            }
-        } catch (error) {
-            console.error("Error fetching TV shows:", error); // Update error message
-        }
+    const fetchTvShows = async () => {
+        const tvShowsData = await getPopularTvShows();
+        setTvShows(tvShowsData);
     };
 
     return (
-        <div className="row">
-            {tvShows.map((tvShow) => ( // Map through tvShows 
-                <TvCard key={tvShow.id} tv={tvShow} /> // Render TvCard components 
-            ))}
+        <div>
+            <h2>Popular TV Shows</h2>
+            <div className="row">
+                {tvShows.map((tvShow) => (
+                    <TvCard key={tvShow.id} tv={tvShow} />
+                ))}
+            </div>
         </div>
     );
 };
 
-export default TvList;
+export default PopularTvShows;
+
