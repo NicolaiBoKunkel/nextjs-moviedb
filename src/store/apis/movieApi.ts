@@ -30,6 +30,17 @@ export const getPopularMovies = async (): Promise<Movie[]> => {
     }
 };
 
+export const getHighestRatedMovies = async (): Promise<Movie[]> => {
+    try {
+        const response = await fetch(`${baseUrl}/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`);
+        const data = await response.json();
+        return data.results || [];
+    } catch (error) {
+        console.error("Error fetching popular movies:", error);
+        return [];
+    }
+};
+
 export const getPopularTvShows = async (): Promise<Tv[]> => {
     try {
         const response = await fetch(`${baseUrl}/tv/popular?api_key=${apiKey}&language=en-US&page=1`);

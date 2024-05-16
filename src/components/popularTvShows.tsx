@@ -26,8 +26,7 @@ const PopularTvShows = () => {
 
     return (
         <div>
-            <h2>Popular TV Shows</h2>
-            <div className="row">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {tvShows.map((tvShow) => (
                     <TvCard key={tvShow.id} tv={tvShow} />
                 ))}

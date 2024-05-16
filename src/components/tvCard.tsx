@@ -46,7 +46,7 @@ function TvCard({ tv }: { tv: Tv}) {
                     <p>{tv.overview ? tv.overview.substring(0, 125).concat('....') : ''}</p>
                     <div className="d-flex justify-content-between p-0">
                         <span className="far fa-calendar" aria-hidden="true"> {tv.first_air_date}</span>
-                        <span className="far fa-play-circle play-icon" onClick={handlePlayTrailer}></span>
+                        <span className="far fa-play-circle play-icon" onClick={handlePlayTrailer}>Play trailer</span>
                     </div>
                 </div>
             </div>

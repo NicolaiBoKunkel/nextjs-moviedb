@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from "react";
-import { getPopularMovies } from "@/store/apis/movieApi";
+import { getHighestRatedMovies } from "@/store/apis/movieApi";
 import MovieCard from "./movieCard";
 
 interface Movie {
@@ -12,7 +12,7 @@ interface Movie {
     release_date: string;
 }
 
-const PopularMovies = () => {
+const HighRatedMovies = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const PopularMovies = () => {
     }, []);
 
     const fetchMovies = async () => {
-        const moviesData = await getPopularMovies();
+        const moviesData = await getHighestRatedMovies();
         setMovies(moviesData);
     };
 
@@ -35,5 +35,4 @@ const PopularMovies = () => {
     );
 };
 
-export default PopularMovies;
-
+export default HighRatedMovies;

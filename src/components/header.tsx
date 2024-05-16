@@ -13,7 +13,7 @@ export default function Header(){
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
             <Link href="/">
                 <div className='rounded-full overflow-hidden'>
-                  <Image src={logoImg} alt="plate with food" priority width="75" height="75" />
+                  <Image src={logoImg} alt="movie img" priority width="75" height="75" />
                 </div>
             </Link>
           <div className="text-sm lg:flex-grow">
