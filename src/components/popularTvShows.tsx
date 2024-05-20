@@ -1,33 +1,18 @@
 'use client';
-import { useState, useEffect } from "react";
-import { getPopularTvShows } from "@/store/apis/movieApi";
+
+import { usePopularTvShows } from "@/store/apis/movieApi";
 import TvCard from "./tvCard";
 
-interface Tv {
-    id: number;
-    original_name: string;
-    poster_path: string;
-    vote_average: number;
-    overview: string;
-    first_air_date: string;
-}
-
 const PopularTvShows = () => {
-    const [tvShows, setTvShows] = useState<Tv[]>([]);
+    const { data: tvShows, isLoading, isError } = usePopularTvShows();
 
-    useEffect(() => {
-        fetchTvShows();
-    }, []);
-
-    const fetchTvShows = async () => {
-        const tvShowsData = await getPopularTvShows();
-        setTvShows(tvShowsData);
-    };
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error loading data</div>;
 
     return (
         <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {tvShows.map((tvShow) => (
+                {tvShows && tvShows.map((tvShow) => (
                     <TvCard key={tvShow.id} tv={tvShow} />
                 ))}
             </div>
@@ -36,4 +21,5 @@ const PopularTvShows = () => {
 };
 
 export default PopularTvShows;
+
 

@@ -1,33 +1,18 @@
-'use client'
-import { useState, useEffect } from "react";
-import { getHighestRatedMovies } from "@/store/apis/movieApi";
+'use client';
+
+import { useHighestRatedMovies } from "@/store/apis/movieApi";
 import MovieCard from "./movieCard";
 
-interface Movie {
-    id: number;
-    title: string;
-    poster_path: string;
-    vote_average: number;
-    overview: string;
-    release_date: string;
-}
-
 const HighRatedMovies = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const { data: movies, isLoading, isError } = useHighestRatedMovies();
 
-    useEffect(() => {
-        fetchMovies();
-    }, []);
-
-    const fetchMovies = async () => {
-        const moviesData = await getHighestRatedMovies();
-        setMovies(moviesData);
-    };
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error loading data</div>;
 
     return (
         <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {movies.map((movie) => (
+                {movies && movies.map((movie) => (
                     <MovieCard key={movie.id} movie={movie} />
                 ))}
             </div>

@@ -1,3 +1,5 @@
+import useSWR from 'swr';
+
 const apiKey = 'e46278258cc52ec12ec6d0d0582c89b7';
 const baseUrl = 'https://api.themoviedb.org/3';
 
@@ -19,36 +21,46 @@ interface Tv {
     first_air_date: string;
 }
 
-export const getPopularMovies = async (): Promise<Movie[]> => {
-    try {
-        const response = await fetch(`${baseUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`);
-        const data = await response.json();
-        return data.results || [];
-    } catch (error) {
-        console.error("Error fetching popular movies:", error);
-        return [];
+const fetcher = async (url: string) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error("An error occurred while fetching the data.");
     }
+    const data = await response.json();
+    return data.results || [];
 };
 
-export const getHighestRatedMovies = async (): Promise<Movie[]> => {
-    try {
-        const response = await fetch(`${baseUrl}/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`);
-        const data = await response.json();
-        return data.results || [];
-    } catch (error) {
-        console.error("Error fetching popular movies:", error);
-        return [];
-    }
+export const usePopularMovies = () => {
+    const { data, error } = useSWR<Movie[]>(`${baseUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`, fetcher);
+
+    return {
+        data,
+        isLoading: !error && !data,
+        isError: error
+    };
 };
 
-export const getPopularTvShows = async (): Promise<Tv[]> => {
-    try {
-        const response = await fetch(`${baseUrl}/tv/popular?api_key=${apiKey}&language=en-US&page=1`);
-        const data = await response.json();
-        return data.results || [];
-    } catch (error) {
-        console.error("Error fetching popular TV shows:", error);
-        return [];
-    }
+export const useHighestRatedMovies = () => {
+    const { data, error } = useSWR<Movie[]>(`${baseUrl}/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`, fetcher);
+
+    return {
+        data,
+        isLoading: !error && !data,
+        isError: error
+    };
 };
+
+export const usePopularTvShows = () => {
+    const { data, error } = useSWR<Tv[]>(`${baseUrl}/tv/popular?api_key=${apiKey}&language=en-US&page=1`, fetcher);
+
+    return {
+        data,
+        isLoading: !error && !data,
+        isError: error
+    };
+};
+
+
+
+
 
