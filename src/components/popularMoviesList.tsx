@@ -1,18 +1,13 @@
-'use client';
-
-import { usePopularMovies } from "@/lib/apis/movieApi";
+import { getPopularMovies } from "@/lib/apis/movieApi";
 import MovieCard from "./movieCard";
 
-const PopularMovies = () => {
-    const { data: movies, isLoading, isError } = usePopularMovies();
-
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Error loading data</div>;
+const PopularMovies = async () => {
+    const movies = await getPopularMovies();
 
     return (
         <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {movies && movies.map((movie) => (
+                {movies.map((movie) => (
                     <MovieCard key={movie.id} movie={movie} />
                 ))}
             </div>
@@ -21,6 +16,7 @@ const PopularMovies = () => {
 };
 
 export default PopularMovies;
+
 
 
 

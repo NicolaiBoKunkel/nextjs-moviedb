@@ -1,18 +1,13 @@
-'use client';
-
-import { useHighestRatedMovies } from "@/lib/apis/movieApi";
+import { getHighestRatedMovies } from "@/lib/apis/movieApi";
 import MovieCard from "./movieCard";
 
-const HighRatedMovies = () => {
-    const { data: movies, isLoading, isError } = useHighestRatedMovies();
-
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Error loading data</div>;
+const HighRatedMovies = async () => {
+    const movies = await getHighestRatedMovies();
 
     return (
         <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {movies && movies.map((movie) => (
+                {movies.map((movie) => (
                     <MovieCard key={movie.id} movie={movie} />
                 ))}
             </div>
@@ -21,3 +16,4 @@ const HighRatedMovies = () => {
 };
 
 export default HighRatedMovies;
+

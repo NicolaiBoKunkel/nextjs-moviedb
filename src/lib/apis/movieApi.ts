@@ -1,7 +1,3 @@
-//Valg om  server eller client fetching?
-
-import useSWR from 'swr';
-
 const apiKey = 'e46278258cc52ec12ec6d0d0582c89b7';
 const baseUrl = 'https://api.themoviedb.org/3';
 
@@ -32,34 +28,16 @@ const fetcher = async (url: string) => {
     return data.results || [];
 };
 
-export const usePopularMovies = () => {
-    const { data, error } = useSWR<Movie[]>(`${baseUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`, fetcher);
-
-    return {
-        data,
-        isLoading: !error && !data,
-        isError: error
-    };
+export const getPopularMovies = async (): Promise<Movie[]> => {
+    return await fetcher(`${baseUrl}/movie/popular?api_key=${apiKey}&language=en-US&page=1`);
 };
 
-export const useHighestRatedMovies = () => {
-    const { data, error } = useSWR<Movie[]>(`${baseUrl}/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`, fetcher);
-
-    return {
-        data,
-        isLoading: !error && !data,
-        isError: error
-    };
+export const getHighestRatedMovies = async (): Promise<Movie[]> => {
+    return await fetcher(`${baseUrl}/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`);
 };
 
-export const usePopularTvShows = () => {
-    const { data, error } = useSWR<Tv[]>(`${baseUrl}/tv/popular?api_key=${apiKey}&language=en-US&page=1`, fetcher);
-
-    return {
-        data,
-        isLoading: !error && !data,
-        isError: error
-    };
+export const getPopularTvShows = async (): Promise<Tv[]> => {
+    return await fetcher(`${baseUrl}/tv/popular?api_key=${apiKey}&language=en-US&page=1`);
 };
 
 

@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -11,8 +12,8 @@ interface Tv {
     first_air_date: string;
 }
 
-function TvCard({ tv }: { tv: Tv }) {
-    const [trailerKey, setTrailerKey] = useState(null);
+const TvCard = ({ tv }: { tv: Tv }) => {
+    const [trailerKey, setTrailerKey] = useState<string | null>(null);
     const posterBasePath = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2';
     const trailerBaseUrl = 'https://www.youtube.com/watch?v=';
 
@@ -43,30 +44,28 @@ function TvCard({ tv }: { tv: Tv }) {
                 </Link>
                 <div className="mt-4">
                     <Link href={`/tv/${tv.id}`}>
-                        <h5 className="font-bold text-xl mb-2">{tv.original_name ? tv.original_name.substring(0, 200) : ''}</h5>
+                        <h5 className="font-bold text-xl mb-2">{tv.original_name.substring(0, 200)}</h5>
                     </Link>
                     <div className="flex items-center mb-2">
-
                         <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                         </svg>
-
                         <span className="ml-1">{tv.vote_average}</span>
                     </div>
-                    <p className="text-gray-700">{tv.overview ? tv.overview.substring(0, 125).concat('....') : ''}</p>
+                    <p className="text-gray-700">{tv.overview.substring(0, 125).concat('....')}</p>
                     <div className="flex justify-between items-center mt-4">
-                        <span className="fas fa-calendar-alt text-gray-500">{' '}{tv.first_air_date}</span>
-                        <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded" onClick={handlePlayTrailer}>
-                            Play trailer
-                        </button>
+                        <span className="fas fa-calendar-alt text-gray-500"> {tv.first_air_date}</span>
+                        <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded" onClick={handlePlayTrailer}>Play trailer</button>
                     </div>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default TvCard;
+
+
 
 
 
