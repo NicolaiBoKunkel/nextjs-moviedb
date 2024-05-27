@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface Movie {
     id: number;
@@ -37,9 +38,13 @@ function MovieCard({ movie }: { movie: Movie }) {
     return (
         <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100">
             <div className="px-6 py-4">
-                <img src={posterBasePath + movie.poster_path} className="rounded" alt={movie.title} />
+                <Link href={`/movie/${movie.id}`}>
+                    <img src={posterBasePath + movie.poster_path} className="rounded" alt={movie.title} />
+                </Link>
                 <div className="mt-4">
-                    <h5 className="font-bold text-xl mb-2">{movie.title.substring(0, 200)}</h5>
+                    <Link href={`/movie/${movie.id}`}>
+                        <h5 className="font-bold text-xl mb-2">{movie.title.substring(0, 200)}</h5>
+                    </Link>
                     <div className="flex items-center mb-2">
 
                         <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">

@@ -1,3 +1,5 @@
+//Valg om  server eller client fetching?
+
 import useSWR from 'swr';
 
 const apiKey = 'e46278258cc52ec12ec6d0d0582c89b7';

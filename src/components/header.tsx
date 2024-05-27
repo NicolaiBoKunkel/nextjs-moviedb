@@ -3,13 +3,8 @@ import Image from 'next/image';
 import NavLink from "./nav-link";
 import logoImg from '/public/movie_black2.jpg';
 
-
-
-
 export default function Header(){
     return (
-
-      
       <nav className='flex items-center justify-between flex-wrap bg-teal-500 p-6'>        
         <div className="space-x-4 w-full block lg:flex lg:items-center lg:w-auto">
             <Link href="/">

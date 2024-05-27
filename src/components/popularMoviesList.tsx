@@ -1,6 +1,6 @@
 'use client';
 
-import { usePopularMovies } from "@/store/apis/movieApi";
+import { usePopularMovies } from "@/lib/apis/movieApi";
 import MovieCard from "./movieCard";
 
 const PopularMovies = () => {
