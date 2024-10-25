@@ -1,5 +1,5 @@
 'use client';
-import { useParams } from 'next/navigation'; // Use useParams from next/navigation
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface Movie {
@@ -9,10 +9,11 @@ interface Movie {
   vote_average: number;
   overview: string;
   release_date: string;
+  original_language: string;
 }
 
 const MovieDetailPage = () => {
-  const { movie: id } = useParams(); // Get the id from useParams
+  const { movie: id } = useParams();
   const [movie, setMovie] = useState<Movie | null>(null);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const MovieDetailPage = () => {
       <p>{movie.overview}</p>
       <p>Release Date: {movie.release_date}</p>
       <p>Rating: {movie.vote_average}</p>
+      <p>Original language: {movie.original_language}</p>
     </div>
   );
 };

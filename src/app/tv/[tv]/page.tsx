@@ -9,6 +9,7 @@ interface Tv {
   vote_average: number;
   overview: string;
   first_air_date: string;
+  original_language: string;
 }
 
 const TvDetailPage = () => {
@@ -37,6 +38,7 @@ const TvDetailPage = () => {
       <p>{tv.overview}</p>
       <p>First Air Date: {tv.first_air_date}</p>
       <p>Rating: {tv.vote_average}</p>
+      <p>Original language: {tv.original_language}</p>
     </div>
   );
 };
