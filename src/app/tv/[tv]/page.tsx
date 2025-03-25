@@ -13,23 +13,19 @@ interface Tv {
 }
 
 const TvDetailPage = () => {
-  const { tv: id } = useParams(); // Get the id from useParams
+  const { tv: id } = useParams();
   const [tv, setTv] = useState<Tv | null>(null);
 
   useEffect(() => {
     if (id) {
-      fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=e46278258cc52ec12ec6d0d0582c89b7`)
-        .then(response => response.json())
-        .then(data => {
-          setTv(data);
-        })
-        .catch(error => console.log('Error fetching TV show:', error));
+      fetch(`http://localhost:5000/api/tv/${id}/details`)
+        .then(res => res.json())
+        .then(setTv)
+        .catch(err => console.error("Error fetching TV show:", err));
     }
   }, [id]);
 
-  if (!tv) {
-    return <div>Loading...</div>;
-  }
+  if (!tv) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto">

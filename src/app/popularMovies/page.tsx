@@ -1,6 +1,6 @@
 import PopularMoviesList from '@/components/popularMoviesList';
 
-export default function PopularMovies() {
+export default function PopularMoviesPage() {
     return (
         <div>
             <PopularMoviesList />

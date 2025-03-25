@@ -18,18 +18,14 @@ const MovieDetailPage = () => {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=e46278258cc52ec12ec6d0d0582c89b7`)
-        .then(response => response.json())
-        .then(data => {
-          setMovie(data);
-        })
-        .catch(error => console.log('Error fetching movie:', error));
+      fetch(`http://localhost:5000/api/movies/${id}/details`)
+        .then(res => res.json())
+        .then(setMovie)
+        .catch(err => console.error("Error fetching movie:", err));
     }
   }, [id]);
 
-  if (!movie) {
-    return <div>Loading...</div>;
-  }
+  if (!movie) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto">

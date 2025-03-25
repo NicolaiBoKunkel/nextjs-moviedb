@@ -18,13 +18,13 @@ const TvCard = ({ tv }: { tv: Tv }) => {
     const trailerBaseUrl = 'https://www.youtube.com/watch?v=';
 
     useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/tv/${tv.id}/videos?api_key=e46278258cc52ec12ec6d0d0582c89b7`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.results && data.results.length > 0) {
-                    setTrailerKey(data.results[0].key);
-                }
-            })
+        fetch(`http://localhost:5000/api/tv/${tv.id}/trailer`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.trailerKey) {
+            setTrailerKey(data.trailerKey);
+          }
+        })
             .catch(error => console.log('Error fetching trailer:', error));
     }, [tv.id]);
 
@@ -64,8 +64,3 @@ const TvCard = ({ tv }: { tv: Tv }) => {
 };
 
 export default TvCard;
-
-
-
-
-
