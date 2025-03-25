@@ -47,12 +47,20 @@ export const getPopularTvShows = async (): Promise<Tv[]> => {
 
 export const getPopularMovies = async (): Promise<Movie[]> => {
     return await fetcher(`${baseUrl}/movies/popular`);
-  };
+};
   
-  export const getHighestRatedMovies = async (): Promise<Movie[]> => {
+export const getHighestRatedMovies = async (): Promise<Movie[]> => {
     return await fetcher(`${baseUrl}/movies/top-rated`);
-  };
+};
   
-  export const getPopularTvShows = async (): Promise<Tv[]> => {
+export const getPopularTvShows = async (): Promise<Tv[]> => {
     return await fetcher(`${baseUrl}/tv/popular`);
-  };
+};
+
+
+export const searchMedia = async (query: string) => {
+    const res = await fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`);
+    if (!res.ok) throw new Error("Search failed");
+    return res.json();
+};
+  

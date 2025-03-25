@@ -7,6 +7,7 @@ export default function Home() {
       imgData={homeImg}
       imgAlt="movies page"
       title="TMDB with Nextjs"
+      subTitle='🔥NEW AND IMPROVED🔥'
       description="By Nicolai"
     />
   );
