@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { addFavorite, removeFavorite, getFavorites } from '@/lib/apis/favoriteApi';
 
 interface Tv {
   id: number;
@@ -23,6 +24,8 @@ interface Tv {
 const TvDetailPage = () => {
   const { tv: id } = useParams();
   const [tv, setTv] = useState<Tv | null>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -31,13 +34,49 @@ const TvDetailPage = () => {
         .then(setTv)
         .catch(err => console.error("Error fetching TV show:", err));
     }
+
+    fetch(`http://localhost:5000/api/tv/${id}/trailer`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.trailerKey) {
+          setTrailerKey(data.trailerKey);
+        }
+      })
+      .catch(err => console.error("Error fetching trailer:", err));
+
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    getFavorites(token)
+      .then(data => {
+        setIsFavorite(data.favorites.includes(Number(id)));
+      })
+      .catch(() => {});
   }, [id]);
+
+  const toggleFavorite = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Please log in to favorite this show.");
+
+    try {
+      if (isFavorite) {
+        await removeFavorite(Number(id), token);
+        setIsFavorite(false);
+      } else {
+        await addFavorite(Number(id), token);
+        setIsFavorite(true);
+      }
+    } catch (err) {
+      console.error("Failed to toggle favorite:", err);
+    }
+  };
 
   if (!tv) return <div className="text-center py-10 text-gray-500">Loading...</div>;
 
   return (
     <div className="relative w-full bg-gray-100 min-h-screen">
-      {/* Backdrop (optional) */}
+      {/* Backdrop */}
       {tv.backdrop_path && (
         <div
           className="w-full h-[400px] bg-cover bg-center brightness-75"
@@ -47,7 +86,7 @@ const TvDetailPage = () => {
         />
       )}
 
-      {/* Main content */}
+      {/* Content */}
       <div className={`max-w-5xl mx-auto px-4 ${tv.backdrop_path ? "-mt-48" : "pt-10"} relative z-10`}>
         <div className="flex flex-col md:flex-row bg-white shadow-xl rounded-lg overflow-hidden">
           {/* Poster */}
@@ -76,6 +115,26 @@ const TvDetailPage = () => {
               )}
             </div>
 
+            {/* Favorite Button */}
+            <button
+              onClick={toggleFavorite}
+              className={`mt-4 px-4 py-2 rounded font-semibold transition ${
+                isFavorite ? "bg-red-500 text-white" : "bg-gray-200"
+              }`}
+            >
+              {isFavorite ? "★ Remove from Favorites" : "☆ Add to Favorites"}
+            </button>
+
+            {trailerKey && (
+              <button
+                onClick={() => window.open(`https://www.youtube.com/watch?v=${trailerKey}`)}
+                className="ml-4 px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 transition"
+              >
+                ▶️ Watch Trailer
+              </button>
+            )}
+
+            {/* Production Companies */}
             {tv.production_companies.length > 0 && (
               <div className="pt-4">
                 <h3 className="font-semibold text-gray-700 mb-1">Production Companies</h3>
