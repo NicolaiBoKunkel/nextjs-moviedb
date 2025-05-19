@@ -24,7 +24,7 @@ export default function LoginPage() {
       .catch(() => {
         // Invalid token, stay on page
       });
-  }, []);
+  }, [router]);
 
   const handleSubmit = async () => {
     try {

@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Image from 'next/image'; // ✅ Added import
+import Image from 'next/image';
 import { addFavorite, removeFavorite, getFavorites } from '@/lib/apis/favoriteApi';
 
 interface Movie {

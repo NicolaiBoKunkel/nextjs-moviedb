@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image'; // ✅ Import
+import Image from 'next/image';
 import { getCurrentUser } from '@/lib/apis/authApi';
 import { getFavorites } from '@/lib/apis/favoriteApi';
 
@@ -52,7 +52,7 @@ export default function UserProfilePage() {
 
       <h2 className="text-2xl font-semibold mb-4">⭐ Your Favorites</h2>
       {favorites.length === 0 ? (
-        <p className="text-gray-600">You haven't favorited any content yet.</p>
+        <p className="text-gray-600">You haven&rsquo;t favorited any content yet.</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {favorites.map((item: any) => (
