@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Image from 'next/image'; // ✅ Import
 import { addFavorite, removeFavorite, getFavorites } from '@/lib/apis/favoriteApi';
 
 interface Tv {
@@ -43,7 +44,6 @@ const TvDetailPage = () => {
         }
       })
       .catch(err => console.error("Error fetching trailer:", err));
-
 
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -90,16 +90,19 @@ const TvDetailPage = () => {
       <div className={`max-w-5xl mx-auto px-4 ${tv.backdrop_path ? "-mt-48" : "pt-10"} relative z-10`}>
         <div className="flex flex-col md:flex-row bg-white shadow-xl rounded-lg overflow-hidden">
           {/* Poster */}
-          <img
-            src={`https://image.tmdb.org/t/p/w500${tv.poster_path}`}
-            alt={tv.original_name}
-            className="w-full md:w-1/3 object-cover"
-          />
+          <div className="relative w-full md:w-1/3 h-[450px]">
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${tv.poster_path}`}
+              alt={tv.original_name}
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
 
           {/* Info */}
           <div className="p-6 space-y-3 flex-1">
             <h1 className="text-3xl font-bold">{tv.original_name}</h1>
-            {tv.tagline && <p className="italic text-teal-600">"{tv.tagline}"</p>}
+            {tv.tagline && <p className="italic text-teal-600">&ldquo;{tv.tagline}&rdquo;</p>}
 
             <p className="text-gray-700">{tv.overview}</p>
 
@@ -142,10 +145,11 @@ const TvDetailPage = () => {
                   {tv.production_companies.map((company) => (
                     <div key={company.name} className="flex items-center gap-2">
                       {company.logo_path && (
-                        <img
+                        <Image
                           src={`https://image.tmdb.org/t/p/w92${company.logo_path}`}
                           alt={company.name}
-                          className="h-6"
+                          width={50}
+                          height={30}
                         />
                       )}
                       <span className="text-sm">{company.name}</span>

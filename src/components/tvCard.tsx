@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { addFavorite, removeFavorite } from "@/lib/apis/favoriteApi";
 
 interface Tv {
@@ -73,11 +74,21 @@ const TvCard = ({ tv }: { tv: Tv }) => {
     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100">
       <div className="px-6 py-4">
         <Link href={`/tv/${tv.id}`}>
-          <img src={posterBasePath + tv.poster_path} className="rounded" alt={tv.original_name} />
+          <div className="relative w-full h-[278px]">
+            <Image
+              src={posterBasePath + tv.poster_path}
+              alt={tv.original_name}
+              fill
+              className="rounded object-cover"
+              sizes="(max-width: 768px) 100vw, 185px"
+            />
+          </div>
         </Link>
         <div className="mt-4">
           <Link href={`/tv/${tv.id}`}>
-            <h5 className="font-bold text-xl mb-2">{tv.original_name.substring(0, 200)}</h5>
+            <h5 className="font-bold text-xl mb-2">
+              {tv.original_name.substring(0, 200)}
+            </h5>
           </Link>
           <div className="flex items-center mb-2">
             <svg className="w-4 h-4 text-yellow-300 me-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
@@ -87,7 +98,7 @@ const TvCard = ({ tv }: { tv: Tv }) => {
           </div>
           <p className="text-gray-700">{tv.overview.substring(0, 125).concat('....')}</p>
           <div className="flex justify-between items-center mt-4">
-            <span className="fas fa-calendar-alt text-gray-500"> {tv.first_air_date}</span>
+            <span className="text-gray-500">{tv.first_air_date}</span>
             <div className="flex gap-2">
               <button
                 className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-1 px-3 rounded"

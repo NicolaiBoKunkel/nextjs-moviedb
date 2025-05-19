@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { searchMedia } from "@/lib/apis/movieApi";
+import Image from "next/image";
 
 let debounceTimer: ReturnType<typeof setTimeout>;
 
@@ -37,7 +38,8 @@ const SearchBar = () => {
       try {
         const data = await searchMedia(query);
         const filtered = data.filter(
-          (item: { media_type: string }) => item.media_type === "movie" || item.media_type === "tv"
+          (item: { media_type: string }) =>
+            item.media_type === "movie" || item.media_type === "tv"
         );
         setResults(filtered);
         setShowSuggestions(true);
@@ -53,7 +55,7 @@ const SearchBar = () => {
   const handleSelect = (item: any) => {
     setResults([]);
     setShowSuggestions(false);
-    setQuery(""); // Optionally clear input
+    setQuery("");
     if (item.media_type === "movie") {
       router.push(`/movie/${item.id}`);
     } else if (item.media_type === "tv") {
@@ -88,11 +90,15 @@ const SearchBar = () => {
               className="flex items-center gap-4 p-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleSelect(item)}
             >
-              <img
-                src={getPoster(item.poster_path)}
-                alt={item.title || item.original_name}
-                className="w-12 h-auto rounded"
-              />
+              <div className="relative w-12 h-18 min-w-[48px]">
+                <Image
+                  src={getPoster(item.poster_path)}
+                  alt={item.title || item.original_name}
+                  fill
+                  className="object-cover rounded"
+                  sizes="48px"
+                />
+              </div>
               <div>
                 <div className="font-medium">
                   {item.media_type === "movie"

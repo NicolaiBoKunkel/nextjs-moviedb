@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Image from 'next/image'; // ✅ Added import
 import { addFavorite, removeFavorite, getFavorites } from '@/lib/apis/favoriteApi';
 
 interface Movie {
@@ -33,18 +34,13 @@ const MovieDetailPage = () => {
         .catch(err => console.error("Error fetching movie:", err));
     }
 
-
     fetch(`http://localhost:5000/api/movies/${id}/trailer`)
       .then(res => res.json())
       .then(data => {
-        if (data.trailerKey) {
-          setTrailerKey(data.trailerKey);
-        }
+        if (data.trailerKey) setTrailerKey(data.trailerKey);
       })
       .catch(err => console.error("Error fetching trailer:", err));
 
-
-    // Check if movie is favorited
     const token = localStorage.getItem("token");
     if (!token) return;
 
@@ -90,16 +86,19 @@ const MovieDetailPage = () => {
       <div className={`max-w-5xl mx-auto px-4 ${movie.backdrop_path ? "-mt-48" : "pt-10"} relative z-10`}>
         <div className="flex flex-col md:flex-row bg-white shadow-xl rounded-lg overflow-hidden">
           {/* Poster */}
-          <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
-            className="w-full md:w-1/3 object-cover"
-          />
+          <div className="relative w-full md:w-1/3 h-[450px]">
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
 
           {/* Info */}
           <div className="p-6 space-y-3 flex-1">
             <h1 className="text-3xl font-bold">{movie.title}</h1>
-            {movie.tagline && <p className="italic text-teal-600">"{movie.tagline}"</p>}
+            <p className="italic text-teal-600">&ldquo;{movie.tagline}&rdquo;</p>
 
             <p className="text-gray-700">{movie.overview}</p>
 
@@ -138,10 +137,11 @@ const MovieDetailPage = () => {
                   {movie.production_companies.map((company) => (
                     <div key={company.name} className="flex items-center gap-2">
                       {company.logo_path && (
-                        <img
+                        <Image
                           src={`https://image.tmdb.org/t/p/w92${company.logo_path}`}
                           alt={company.name}
-                          className="h-6"
+                          width={50}
+                          height={30}
                         />
                       )}
                       <span className="text-sm">{company.name}</span>

@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image'; // ✅ Import
 import { getCurrentUser } from '@/lib/apis/authApi';
 import { getFavorites } from '@/lib/apis/favoriteApi';
 
@@ -57,11 +58,14 @@ export default function UserProfilePage() {
           {favorites.map((item: any) => (
             <Link key={`${item.mediaType}-${item.id}`} href={`/${item.mediaType}/${item.id}`} className="block">
               <div className="bg-white shadow-md rounded overflow-hidden hover:shadow-lg transition">
-                <img
-                  src={`https://image.tmdb.org/t/p/w185${item.poster_path}`}
-                  alt={item.title || item.name}
-                  className="w-full"
-                />
+                <div className="relative w-full h-[278px]"> {/* 185px width ratio height */}
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w185${item.poster_path}`}
+                    alt={item.title || item.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <div className="p-2 text-center">
                   <p className="font-semibold">{item.title || item.name}</p>
                   <p className="text-sm text-gray-500">

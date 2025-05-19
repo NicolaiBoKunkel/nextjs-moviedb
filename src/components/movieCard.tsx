@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { addFavorite, removeFavorite } from "@/lib/apis/favoriteApi";
 
 interface Movie {
@@ -71,11 +72,15 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100">
       <div className="px-6 py-4">
         <Link href={`/movie/${movie.id}`}>
-          <img
-            src={posterBasePath + movie.poster_path}
-            className="rounded"
-            alt={movie.title}
-          />
+          <div className="relative w-full h-[278px]">
+            <Image
+              src={posterBasePath + movie.poster_path}
+              alt={movie.title}
+              fill
+              className="object-cover rounded"
+              sizes="(max-width: 640px) 100vw, 185px"
+            />
+          </div>
         </Link>
         <div className="mt-4">
           <Link href={`/movie/${movie.id}`}>
