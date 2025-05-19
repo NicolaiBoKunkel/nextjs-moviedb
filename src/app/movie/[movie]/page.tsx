@@ -61,10 +61,10 @@ const MovieDetailPage = () => {
 
     try {
       if (isFavorite) {
-        await removeFavorite(Number(id), token);
+        await removeFavorite(Number(id), "movie", token);
         setIsFavorite(false);
       } else {
-        await addFavorite(Number(id), token);
+        await addFavorite(Number(id), "movie", token);
         setIsFavorite(true);
       }
     } catch (err) {
@@ -107,7 +107,7 @@ const MovieDetailPage = () => {
               <p><strong>Release Date:</strong> {movie.release_date}</p>
               <p><strong>Rating:</strong> ⭐ {movie.vote_average}</p>
               <p><strong>Runtime:</strong> ⏱️ {movie.runtime} minutes</p>
-              <p><strong>Language:</strong> {movie.original_language.toUpperCase()}</p>
+              <p><strong>Language:</strong> {movie.original_language?.toUpperCase() || "N/A"}</p>
               <p><strong>Genres:</strong> {movie.genres.map(g => g.name).join(', ')}</p>
             </div>
 

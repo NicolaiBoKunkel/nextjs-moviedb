@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // 🔐 Redirect if already logged in
+  // Redirect if already logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;

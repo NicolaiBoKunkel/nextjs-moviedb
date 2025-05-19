@@ -5,24 +5,24 @@ export const getFavorites = async (token: string) => {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Failed to fetch favorites");
-  return res.json(); // { favorites: [123, 456] }
+  return res.json(); // { favorites: [{ mediaId, mediaType }] }
 };
 
-export const addFavorite = async (mediaId: number, token: string) => {
+export const addFavorite = async (mediaId: number, mediaType: "movie" | "tv", token: string) => {
   const res = await fetch(`${API_BASE}/favorites`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ mediaId }),
+    body: JSON.stringify({ mediaId, mediaType }),
   });
   if (!res.ok) throw new Error("Failed to add favorite");
   return res.json();
 };
 
-export const removeFavorite = async (mediaId: number, token: string) => {
-  const res = await fetch(`${API_BASE}/favorites/${mediaId}`, {
+export const removeFavorite = async (mediaId: number, mediaType: "movie" | "tv", token: string) => {
+  const res = await fetch(`${API_BASE}/favorites/${mediaId}/${mediaType}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });

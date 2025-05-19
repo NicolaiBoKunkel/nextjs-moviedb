@@ -1,7 +1,7 @@
 //const apiKey = 'e46278258cc52ec12ec6d0d0582c89b7';
 //const baseUrl = 'https://api.themoviedb.org/3';
 
-const baseUrl = 'http://localhost:5000/api'; // Your backend
+const baseUrl = 'http://localhost:5000/api';
 
 
 export interface Movie {

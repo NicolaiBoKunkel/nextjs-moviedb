@@ -21,7 +21,6 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
   const trailerBaseUrl = 'https://www.youtube.com/watch?v=';
 
   useEffect(() => {
-    // Fetch trailer key
     fetch(`http://localhost:5000/api/movies/${movie.id}/trailer`)
       .then(res => res.json())
       .then(data => {
@@ -29,7 +28,6 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
       })
       .catch(error => console.log('Error fetching trailer:', error));
 
-    // Check if this movie is favorited
     const token = localStorage.getItem("token");
     if (!token) return;
 
@@ -38,7 +36,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.favorites.includes(movie.id)) {
+        if (data.favorites.some((fav: any) => fav.mediaId === movie.id && fav.mediaType === "movie")) {
           setIsFavorite(true);
         }
       })
@@ -59,9 +57,9 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
 
     try {
       if (isFavorite) {
-        await removeFavorite(movie.id, token);
+        await removeFavorite(movie.id, "movie", token);
       } else {
-        await addFavorite(movie.id, token);
+        await addFavorite(movie.id, "movie", token);
       }
       setIsFavorite(!isFavorite);
     } catch (err) {
@@ -85,7 +83,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
           </Link>
           <div className="flex items-center mb-2">
             <svg className="w-4 h-4 text-yellow-300 me-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
             </svg>
             <span className="ml-1">{movie.vote_average}</span>
           </div>
@@ -101,9 +99,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
               </button>
               <button
                 onClick={toggleFavorite}
-                className={`py-1 px-3 rounded font-semibold ${
-                  isFavorite ? 'bg-red-500 text-white' : 'bg-gray-300'
-                }`}
+                className={`py-1 px-3 rounded font-semibold ${isFavorite ? 'bg-red-500 text-white' : 'bg-gray-300'}`}
               >
                 {isFavorite ? '★' : '☆'}
               </button>
