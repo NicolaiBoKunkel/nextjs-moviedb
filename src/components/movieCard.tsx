@@ -14,6 +14,8 @@ interface Movie {
   release_date: string;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
 const MovieCard = ({ movie }: { movie: Movie }) => {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -22,7 +24,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
   const trailerBaseUrl = 'https://www.youtube.com/watch?v=';
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/movies/${movie.id}/trailer`)
+    fetch(`${baseUrl}/movies/${movie.id}/trailer`)
       .then(res => res.json())
       .then(data => {
         if (data.trailerKey) setTrailerKey(data.trailerKey);
@@ -32,7 +34,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:5000/api/users/favorites", {
+    fetch(`${baseUrl}/users/favorites`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
