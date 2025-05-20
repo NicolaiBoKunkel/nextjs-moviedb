@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5000/api/auth";
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/auth`;
 
 export const registerUser = async (username: string, email: string, password: string) => {
   const res = await fetch(`${API_BASE}/register`, {

@@ -22,6 +22,8 @@ interface Tv {
   production_companies: { name: string; logo_path: string | null }[];
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
 const TvDetailPage = () => {
   const { tv: id } = useParams();
   const [tv, setTv] = useState<Tv | null>(null);
@@ -30,13 +32,13 @@ const TvDetailPage = () => {
 
   useEffect(() => {
     if (id) {
-      fetch(`http://localhost:5000/api/tv/${id}/details`)
+      fetch(`${baseUrl}/tv/${id}/details`)
         .then(res => res.json())
         .then(setTv)
         .catch(err => console.error("Error fetching TV show:", err));
     }
 
-    fetch(`http://localhost:5000/api/tv/${id}/trailer`)
+    fetch(`${baseUrl}/tv/${id}/trailer`)
       .then(res => res.json())
       .then(data => {
         if (data.trailerKey) {

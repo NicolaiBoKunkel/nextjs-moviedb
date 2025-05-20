@@ -20,6 +20,8 @@ interface Movie {
   production_companies: { name: string; logo_path: string | null }[];
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
 const MovieDetailPage = () => {
   const { movie: id } = useParams();
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -28,13 +30,13 @@ const MovieDetailPage = () => {
 
   useEffect(() => {
     if (id) {
-      fetch(`http://localhost:5000/api/movies/${id}/details`)
+      fetch(`${baseUrl}/movies/${id}/details`)
         .then(res => res.json())
         .then(setMovie)
         .catch(err => console.error("Error fetching movie:", err));
     }
 
-    fetch(`http://localhost:5000/api/movies/${id}/trailer`)
+    fetch(`${baseUrl}/movies/${id}/trailer`)
       .then(res => res.json())
       .then(data => {
         if (data.trailerKey) setTrailerKey(data.trailerKey);

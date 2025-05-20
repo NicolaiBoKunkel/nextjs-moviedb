@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000/api/users';
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/users`;
 
 export const getFavorites = async (token: string) => {
   const res = await fetch(`${API_BASE}/favorites`, {
