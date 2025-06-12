@@ -74,12 +74,12 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100">
       <div className="px-6 py-4">
         <Link href={`/movie/${movie.id}`}>
-          <div className="relative w-full h-[278px]">
+          <div className="w-[185px] h-[278px] relative">
             <Image
               src={posterBasePath + movie.poster_path}
               alt={movie.title}
               fill
-              className="object-cover rounded"
+              className="object-contain rounded"
               sizes="(max-width: 640px) 100vw, 185px"
             />
           </div>
