@@ -110,7 +110,7 @@ const TvDetailPage = () => {
 
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>First Air Date:</strong> {tv.first_air_date}</p>
-              <p><strong>Rating:</strong> ⭐ {tv.vote_average}</p>
+              <p><strong>TMDB Rating:</strong> ⭐ {tv.vote_average}</p>
               <p><strong>Language:</strong> {tv.original_language?.toUpperCase() || "N/A"}</p>
               <p><strong>Genres:</strong> {tv.genres.map(g => g.name).join(', ')}</p>
               <p><strong>Seasons:</strong> {tv.number_of_seasons}</p>

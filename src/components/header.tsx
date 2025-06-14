@@ -7,6 +7,7 @@ import NavLink from "./nav-link";
 import SearchBar from "./SearchBar";
 import logoImg from '/public/movie_black2.jpg';
 import { getCurrentUser } from "@/lib/apis/authApi";
+import styles from './nav-link.module.css';
 
 export default function Header() {
   const [user, setUser] = useState<any>(null);
@@ -38,10 +39,25 @@ export default function Header() {
             <Image src={logoImg} alt="movie img" priority width="75" height="75" />
           </div>
         </Link>
-        <div className="flex gap-4 text-lg text-white font-semibold">
-          <NavLink href="/popularMovies">Popular Movies</NavLink>
-          <NavLink href="/highestRatedMovies">Highest Rated</NavLink>
-          <NavLink href="/popularTv">TV</NavLink>
+        <div className="flex gap-4 text-lg font-semibold relative">
+          {/* Movies Dropdown */}
+          <details className="group relative">
+            <summary className={`${styles.link} cursor-pointer list-none`}>Movies</summary>
+            <div className="absolute mt-2 bg-white rounded shadow-md flex flex-col z-10 group-open:block hidden min-w-[160px]">
+              <Link href="/popularMovies" className={styles.link}>Popular</Link>
+              <Link href="/highestRatedMovies" className={styles.link}>Top Rated</Link>
+            </div>
+          </details>
+
+          {/* TV Shows Dropdown */}
+          <details className="group relative">
+            <summary className={`${styles.link} cursor-pointer list-none`}>TV Shows</summary>
+            <div className="absolute mt-2 bg-white rounded shadow-md flex flex-col z-10 group-open:block hidden min-w-[160px]">
+              <Link href="/popularTv" className={styles.link}>Popular</Link>
+              <Link href="/highestRatedTv" className={styles.link}>Top Rated</Link>
+            </div>
+          </details>
+
           <NavLink href="/aboutUs">About</NavLink>
         </div>
       </div>

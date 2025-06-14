@@ -40,6 +40,10 @@ export const getPopularTvShows = async (): Promise<Tv[]> => {
     return await fetcher(`${baseUrl}/tv/popular`);
 };
 
+export const getHighestRatedTvShows = async (): Promise<Tv[]> => {
+    return await fetcher(`${baseUrl}/tv/top-rated`);
+};
+
 export const searchMedia = async (query: string) => {
     return await fetcher(`${baseUrl}/search?q=${encodeURIComponent(query)}`);
 };

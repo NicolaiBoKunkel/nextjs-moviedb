@@ -106,7 +106,7 @@ const MovieDetailPage = () => {
 
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>Release Date:</strong> {movie.release_date}</p>
-              <p><strong>Rating:</strong> ⭐ {movie.vote_average}</p>
+              <p><strong>TMDB Rating:</strong> ⭐ {movie.vote_average}</p>
               <p><strong>Runtime:</strong> ⏱️ {movie.runtime} minutes</p>
               <p><strong>Language:</strong> {movie.original_language?.toUpperCase() || "N/A"}</p>
               <p><strong>Genres:</strong> {movie.genres.map(g => g.name).join(', ')}</p>
