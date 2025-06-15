@@ -97,6 +97,7 @@ export default function Header() {
             )}
           </div>
 
+          <NavLink href="/popularPeople">Popular People</NavLink>
           <NavLink href="/aboutUs">About</NavLink>
         </div>
       </div>

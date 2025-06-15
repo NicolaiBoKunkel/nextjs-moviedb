@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { addFavorite, removeFavorite, getFavorites } from '@/lib/apis/favoriteApi';
 
 interface Tv {
@@ -22,39 +23,49 @@ interface Tv {
   production_companies: { name: string; logo_path: string | null }[];
 }
 
+interface Cast {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 const TvDetailPage = () => {
   const { tv: id } = useParams();
   const [tv, setTv] = useState<Tv | null>(null);
+  const [cast, setCast] = useState<Cast[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
   useEffect(() => {
-    if (id) {
-      fetch(`${baseUrl}/tv/${id}/details`)
-        .then(res => res.json())
-        .then(setTv)
-        .catch(err => console.error("Error fetching TV show:", err));
-    }
+    if (!id) return;
+
+    fetch(`${baseUrl}/tv/${id}/details`)
+      .then(res => res.json())
+      .then(setTv)
+      .catch(err => console.error("Error fetching TV show:", err));
 
     fetch(`${baseUrl}/tv/${id}/trailer`)
       .then(res => res.json())
       .then(data => {
-        if (data.trailerKey) {
-          setTrailerKey(data.trailerKey);
-        }
-      })
-      .catch(err => console.error("Error fetching trailer:", err));
+        if (data.trailerKey) setTrailerKey(data.trailerKey);
+      });
+
+    fetch(`${baseUrl}/tv/${id}/credits`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.cast) setCast(data.cast.slice(0, 12)); // limit display
+      });
 
     const token = localStorage.getItem("token");
     if (!token) return;
 
     getFavorites(token)
       .then(data => {
-        setIsFavorite(data.favorites.includes(Number(id)));
-      })
-      .catch(() => {});
+        setIsFavorite(data.favorites.some((f: any) => f.mediaId === Number(id) && f.mediaType === "tv"));
+      });
   }, [id]);
 
   const toggleFavorite = async () => {
@@ -82,9 +93,7 @@ const TvDetailPage = () => {
       {tv.backdrop_path && (
         <div
           className="w-full h-[400px] bg-cover bg-center brightness-75"
-          style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${tv.backdrop_path})`,
-          }}
+          style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${tv.backdrop_path})` }}
         />
       )}
 
@@ -111,16 +120,15 @@ const TvDetailPage = () => {
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>First Air Date:</strong> {tv.first_air_date}</p>
               <p><strong>TMDB Rating:</strong> ⭐ {tv.vote_average}</p>
-              <p><strong>Language:</strong> {tv.original_language?.toUpperCase() || "N/A"}</p>
+              <p><strong>Language:</strong> {tv.original_language?.toUpperCase()}</p>
               <p><strong>Genres:</strong> {tv.genres.map(g => g.name).join(', ')}</p>
               <p><strong>Seasons:</strong> {tv.number_of_seasons}</p>
               <p><strong>Episodes:</strong> {tv.number_of_episodes}</p>
               {tv.episode_run_time.length > 0 && (
-                <p><strong>Avg Episode Runtime:</strong> ⏱️ {tv.episode_run_time[0]} min</p>
+                <p><strong>Avg Runtime:</strong> ⏱️ {tv.episode_run_time[0]} min</p>
               )}
             </div>
 
-            {/* Favorite Button */}
             <button
               onClick={toggleFavorite}
               className={`mt-4 px-4 py-2 rounded font-semibold transition ${
@@ -133,7 +141,7 @@ const TvDetailPage = () => {
             {trailerKey && (
               <button
                 onClick={() => window.open(`https://www.youtube.com/watch?v=${trailerKey}`)}
-                className="ml-4 px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 transition"
+                className="ml-4 px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700"
               >
                 ▶️ Watch Trailer
               </button>
@@ -162,6 +170,34 @@ const TvDetailPage = () => {
             )}
           </div>
         </div>
+
+        {/* Cast Section */}
+        {cast.length > 0 && (
+          <div className="bg-white mt-6 p-6 rounded shadow-md">
+            <h2 className="text-2xl font-bold mb-4">🎭 Cast</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {cast.map(person => (
+                <Link key={person.id} href={`/person/${person.id}`}>
+                  <div className="text-center hover:shadow-lg bg-gray-50 p-2 rounded">
+                    {person.profile_path ? (
+                      <Image
+                        src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
+                        alt={person.name}
+                        width={120}
+                        height={160}
+                        className="rounded mx-auto"
+                      />
+                    ) : (
+                      <div className="w-[120px] h-[160px] bg-gray-300 rounded mx-auto" />
+                    )}
+                    <p className="font-medium mt-2">{person.name}</p>
+                    <p className="text-sm text-gray-500">{person.character}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
