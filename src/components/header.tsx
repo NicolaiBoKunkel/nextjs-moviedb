@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from 'next/link'; 
 import Image from 'next/image';
 import NavLink from "./nav-link";
@@ -11,6 +11,32 @@ import styles from './nav-link.module.css';
 
 export default function Header() {
   const [user, setUser] = useState<any>(null);
+  const [isMoviesOpen, setIsMoviesOpen] = useState(false);
+  const [isTvOpen, setIsTvOpen] = useState(false);
+
+  const moviesRef = useRef<HTMLDivElement>(null);
+  const tvRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        moviesRef.current &&
+        !moviesRef.current.contains(event.target as Node)
+      ) {
+        setIsMoviesOpen(false);
+      }
+
+      if (
+        tvRef.current &&
+        !tvRef.current.contains(event.target as Node)
+      ) {
+        setIsTvOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,7 +57,6 @@ export default function Header() {
 
   return (
     <nav className="bg-teal-500 p-4 flex flex-col lg:flex-row items-center justify-between gap-4">
-      
       {/* Left: Logo + Nav */}
       <div className="flex items-center gap-6 flex-wrap">
         <Link href="/">
@@ -41,22 +66,36 @@ export default function Header() {
         </Link>
         <div className="flex gap-4 text-lg font-semibold relative">
           {/* Movies Dropdown */}
-          <details className="group relative">
-            <summary className={`${styles.link} cursor-pointer list-none`}>Movies</summary>
-            <div className="absolute mt-2 bg-white rounded shadow-md flex flex-col z-10 group-open:block hidden min-w-[160px]">
-              <Link href="/popularMovies" className={styles.link}>Popular</Link>
-              <Link href="/highestRatedMovies" className={styles.link}>Top Rated</Link>
-            </div>
-          </details>
+          <div ref={moviesRef} className="relative">
+            <button
+              onClick={() => setIsMoviesOpen((prev) => !prev)}
+              className={`${styles.link} cursor-pointer`}
+            >
+              Movies
+            </button>
+            {isMoviesOpen && (
+              <div className="absolute mt-2 bg-teal-500 rounded shadow-md flex flex-col z-10 min-w-[160px]">
+                <Link href="/popularMovies" className={styles.link}>Popular</Link>
+                <Link href="/highestRatedMovies" className={styles.link}>Top Rated</Link>
+              </div>
+            )}
+          </div>
 
           {/* TV Shows Dropdown */}
-          <details className="group relative">
-            <summary className={`${styles.link} cursor-pointer list-none`}>TV Shows</summary>
-            <div className="absolute mt-2 bg-white rounded shadow-md flex flex-col z-10 group-open:block hidden min-w-[160px]">
-              <Link href="/popularTv" className={styles.link}>Popular</Link>
-              <Link href="/highestRatedTv" className={styles.link}>Top Rated</Link>
-            </div>
-          </details>
+          <div ref={tvRef} className="relative">
+            <button
+              onClick={() => setIsTvOpen((prev) => !prev)}
+              className={`${styles.link} cursor-pointer`}
+            >
+              TV Shows
+            </button>
+            {isTvOpen && (
+              <div className="absolute mt-2 bg-teal-500 rounded shadow-md flex flex-col z-10 min-w-[160px]">
+                <Link href="/popularTv" className={styles.link}>Popular</Link>
+                <Link href="/highestRatedTv" className={styles.link}>Top Rated</Link>
+              </div>
+            )}
+          </div>
 
           <NavLink href="/aboutUs">About</NavLink>
         </div>

@@ -58,7 +58,7 @@ const PopularMovies = () => {
                 <button
                     disabled={currentPage <= 1}
                     onClick={() => goToPage(currentPage - 1)}
-                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                    className="bg-white text-teal-700 font-bold px-3 py-1 rounded hover:bg-teal-100 disabled:opacity-50"
                 >
                     Previous
                 </button>
@@ -68,7 +68,7 @@ const PopularMovies = () => {
                 <button
                     disabled={currentPage >= data.total_pages}
                     onClick={() => goToPage(currentPage + 1)}
-                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                    className="bg-white text-teal-700 font-bold px-3 py-1 rounded hover:bg-teal-100 disabled:opacity-50"
                 >
                     Next
                 </button>
