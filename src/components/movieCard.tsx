@@ -20,7 +20,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const posterBasePath = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2';
+  const posterBasePath = 'https://image.tmdb.org/t/p/original/';
   const trailerBaseUrl = 'https://www.youtube.com/watch?v=';
 
   useEffect(() => {

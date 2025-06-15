@@ -181,7 +181,7 @@ const TvDetailPage = () => {
                   <div className="text-center hover:shadow-lg bg-gray-50 p-2 rounded">
                     {person.profile_path ? (
                       <Image
-                        src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
+                        src={`https://image.tmdb.org/t/p/original${person.profile_path}`}
                         alt={person.name}
                         width={120}
                         height={160}

@@ -172,7 +172,7 @@ const MovieDetailPage = () => {
                   <div className="text-center hover:shadow-lg bg-gray-50 p-2 rounded">
                     {member.profile_path ? (
                       <Image
-                        src={`https://image.tmdb.org/t/p/w185${member.profile_path}`}
+                        src={`https://image.tmdb.org/t/p/original${member.profile_path}`}
                         alt={member.name}
                         width={120}
                         height={160}

@@ -12,7 +12,7 @@ interface Person {
 
 const PersonCard = ({ person }: { person: Person }) => {
   const imageUrl = person.profile_path
-    ? `https://image.tmdb.org/t/p/w185${person.profile_path}`
+    ? `https://image.tmdb.org/t/p/original${person.profile_path}`
     : '/no-profile.png'; // fallback image if no profile
 
   return (

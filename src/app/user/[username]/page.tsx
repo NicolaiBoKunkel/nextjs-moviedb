@@ -60,7 +60,7 @@ export default function UserProfilePage() {
               <div className="bg-white shadow-md rounded overflow-hidden hover:shadow-lg transition">
                 <div className="relative w-full h-[278px]"> {/* 185px width ratio height */}
                   <Image
-                    src={`https://image.tmdb.org/t/p/w185${item.poster_path}`}
+                    src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
                     alt={item.title || item.name}
                     fill
                     className="object-cover"

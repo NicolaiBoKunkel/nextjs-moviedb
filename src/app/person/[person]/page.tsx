@@ -24,7 +24,7 @@ interface Credit {
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 const tmdbBaseUrl = 'https://api.themoviedb.org/3';
-const imageBase = 'https://image.tmdb.org/t/p/w300_and_h450_bestv2';
+const imageBase = 'https://image.tmdb.org/t/p/original/';
 
 async function fetchCredits(personId: string): Promise<Credit[]> {
   const res = await fetch(`${baseUrl}/people/${personId}/credits`);
@@ -50,13 +50,15 @@ export default async function PersonPage({ params }: { params: { person: string 
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         {person.profile_path && (
+        <div className="w-[300px] h-[450px] flex-shrink-0">
           <Image
             src={imageBase + person.profile_path}
             alt={person.name}
             width={300}
             height={450}
-            className="rounded shadow-lg"
+            className="rounded shadow-lg object-cover"
           />
+        </div>
         )}
 
         <div>
@@ -87,7 +89,7 @@ export default async function PersonPage({ params }: { params: { person: string 
               <Link key={c.id} href={`/${c.media_type}/${c.id}`} className="block">
                 <div className="bg-white rounded shadow hover:shadow-md transition overflow-hidden">
                   <Image
-                    src={`https://image.tmdb.org/t/p/w185${c.poster_path}`}
+                    src={`https://image.tmdb.org/t/p/original${c.poster_path}`}
                     alt={c.title || c.name || 'No title available'}
                     width={185}
                     height={278}
