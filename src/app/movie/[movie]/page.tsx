@@ -4,7 +4,11 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { addFavorite, removeFavorite, getFavorites } from '@/lib/apis/favoriteApi';
+import {
+  addFavorite,
+  removeFavorite,
+  getFavorites,
+} from '@/lib/apis/favoriteApi';
 
 interface Movie {
   id: number;
@@ -28,7 +32,15 @@ interface CastMember {
   profile_path: string | null;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+interface Comment {
+  _id: string;
+  username: string;
+  userId: string;
+  text: string;
+  createdAt: string;
+}
+
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const MovieDetailPage = () => {
   const { movie: id } = useParams();
@@ -37,51 +49,134 @@ const MovieDetailPage = () => {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [cast, setCast] = useState<CastMember[]>([]);
 
+  const [userRating, setUserRating] = useState<number | null>(null);
+  const [averageRating, setAverageRating] = useState<number | null>(null);
+  const [ratingCount, setRatingCount] = useState<number>(0);
+
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState('');
+  const [username, setUsername] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+  // ✅ Fetch user data first to ensure userId is set before rendering comments
   useEffect(() => {
-    if (id) {
-      fetch(`${baseUrl}/movies/${id}/details`)
-        .then(res => res.json())
-        .then(setMovie)
-        .catch(err => console.error("Error fetching movie:", err));
-
-      fetch(`${baseUrl}/movies/${id}/trailer`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.trailerKey) setTrailerKey(data.trailerKey);
-        })
-        .catch(err => console.error("Error fetching trailer:", err));
-
-      fetch(`${baseUrl}/movies/${id}/credits`)
-        .then(res => res.json())
-        .then(data => setCast(data.cast))
-        .catch(err => console.error("Error fetching cast:", err));
-    }
-
-    const token = localStorage.getItem("token");
     if (!token) return;
 
-    getFavorites(token)
-      .then(data => {
-        setIsFavorite(data.favorites.some((fav: any) => fav.mediaId === Number(id) && fav.mediaType === "movie"));
+    fetch(`${baseUrl}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUsername(data.username);
+        setUserId(data.id || data._id);
       })
       .catch(() => {});
-  }, [id]);
+  }, [token]);
+
+  // ✅ Load movie and related data
+  useEffect(() => {
+    if (!id) return;
+
+    fetch(`${baseUrl}/movies/${id}/details`)
+      .then((res) => res.json())
+      .then(setMovie);
+
+    fetch(`${baseUrl}/movies/${id}/trailer`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.trailerKey) setTrailerKey(data.trailerKey);
+      });
+
+    fetch(`${baseUrl}/movies/${id}/credits`)
+      .then((res) => res.json())
+      .then((data) => setCast(data.cast || []));
+
+    fetch(`${baseUrl}/comments/movie/${id}`)
+      .then((res) => res.json())
+      .then(setComments);
+
+    if (token) {
+      getFavorites(token).then((data) => {
+        setIsFavorite(data.favorites.some((fav: any) =>
+          fav.mediaId === Number(id) && fav.mediaType === 'movie'
+        ));
+      });
+
+      fetch(`${baseUrl}/ratings/movie/${id}`)
+        .then((res) => res.json())
+        .then(({ average, count }) => {
+          setAverageRating(average);
+          setRatingCount(count);
+        });
+    }
+  }, [id, token]);
 
   const toggleFavorite = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Please log in to favorite this movie.");
-
+    if (!token) return alert('Please log in to favorite this movie.');
     try {
       if (isFavorite) {
-        await removeFavorite(Number(id), "movie", token);
+        await removeFavorite(Number(id), 'movie', token);
         setIsFavorite(false);
       } else {
-        await addFavorite(Number(id), "movie", token);
+        await addFavorite(Number(id), 'movie', token);
         setIsFavorite(true);
       }
     } catch (err) {
-      console.error("Failed to toggle favorite:", err);
+      console.error('Failed to toggle favorite:', err);
     }
+  };
+
+  const handleRatingSubmit = async () => {
+    if (!token || !userRating) return;
+    await fetch(`${baseUrl}/ratings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ mediaId: Number(id), mediaType: 'movie', rating: userRating }),
+    });
+    const updated = await fetch(`${baseUrl}/ratings/movie/${id}`).then((res) => res.json());
+    setAverageRating(updated.average);
+    setRatingCount(updated.count);
+  };
+
+  const handleDeleteRating = async () => {
+    if (!token) return;
+    await fetch(`${baseUrl}/ratings/movie/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setUserRating(null);
+    const updated = await fetch(`${baseUrl}/ratings/movie/${id}`).then((res) => res.json());
+    setAverageRating(updated.average);
+    setRatingCount(updated.count);
+  };
+
+  const handleCommentSubmit = async () => {
+    if (!token || !newComment.trim()) return;
+    const res = await fetch(`${baseUrl}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ mediaId: Number(id), mediaType: 'movie', text: newComment }),
+    });
+    const data = await res.json();
+    setComments((prev) => [data.comment, ...prev]);
+    setNewComment('');
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!token) return;
+    await fetch(`${baseUrl}/comments/${commentId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setComments((prev) => prev.filter((c) => c._id !== commentId));
   };
 
   if (!movie) return <div className="text-center py-10 text-gray-500">Loading...</div>;
@@ -97,7 +192,7 @@ const MovieDetailPage = () => {
         />
       )}
 
-      <div className={`max-w-5xl mx-auto px-4 ${movie.backdrop_path ? "-mt-48" : "pt-10"} relative z-10`}>
+      <div className={`max-w-5xl mx-auto px-4 ${movie.backdrop_path ? '-mt-48' : 'pt-10'} relative z-10`}>
         <div className="flex flex-col md:flex-row bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="relative w-full md:w-1/3 h-[450px]">
             <Image
@@ -116,58 +211,63 @@ const MovieDetailPage = () => {
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>Release Date:</strong> {movie.release_date}</p>
               <p><strong>TMDB Rating:</strong> ⭐ {movie.vote_average}</p>
+              <p><strong>User Rating:</strong> ⭐ {averageRating ?? "N/A"} ({ratingCount} ratings)</p>
               <p><strong>Runtime:</strong> ⏱️ {movie.runtime} minutes</p>
-              <p><strong>Language:</strong> {movie.original_language?.toUpperCase() || "N/A"}</p>
-              <p><strong>Genres:</strong> {movie.genres.map(g => g.name).join(', ')}</p>
+              <p><strong>Language:</strong> {movie.original_language?.toUpperCase() || 'N/A'}</p>
+              <p><strong>Genres:</strong> {movie.genres.map((g) => g.name).join(', ')}</p>
             </div>
 
-            <button
-              onClick={toggleFavorite}
-              className={`mt-4 px-4 py-2 rounded font-semibold transition hover:bg-red-300 ${
-                isFavorite ? "bg-red-500 text-white" : "bg-gray-200"
-              }`}
-            >
-              {isFavorite ? "★ Remove from Favorites" : "☆ Add to Favorites"}
-            </button>
-
-            {trailerKey && (
+            <div className="flex gap-4 flex-wrap mt-4">
               <button
-                onClick={() => window.open(`https://www.youtube.com/watch?v=${trailerKey}`)}
-                className="ml-4 px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 transition"
+                onClick={toggleFavorite}
+                className={`px-4 py-2 rounded font-semibold transition hover:bg-red-300 ${
+                  isFavorite ? 'bg-red-500 text-white' : 'bg-gray-200'
+                }`}
               >
-                ▶️ Watch Trailer
+                {isFavorite ? '★ Remove from Favorites' : '☆ Add to Favorites'}
               </button>
-            )}
 
-            {movie.production_companies.length > 0 && (
+              {trailerKey && (
+                <button
+                  onClick={() => window.open(`https://www.youtube.com/watch?v=${trailerKey}`)}
+                  className="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 transition"
+                >
+                  ▶️ Watch Trailer
+                </button>
+              )}
+            </div>
+
+            {token && (
               <div className="pt-4">
-                <h3 className="font-semibold text-gray-700 mb-1">Production Companies</h3>
-                <div className="flex flex-wrap gap-4">
-                  {movie.production_companies.map((company) => (
-                    <div key={company.name} className="flex items-center gap-2">
-                      {company.logo_path && (
-                        <Image
-                          src={`https://image.tmdb.org/t/p/w92${company.logo_path}`}
-                          alt={company.name}
-                          width={50}
-                          height={30}
-                        />
-                      )}
-                      <span className="text-sm">{company.name}</span>
-                    </div>
-                  ))}
+                <h3 className="font-semibold mb-1">Your Rating</h3>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min={1}
+                    max={10}
+                    value={userRating ?? ''}
+                    onChange={(e) => setUserRating(Number(e.target.value))}
+                    className="w-16 p-1 border rounded"
+                  />
+                  <button onClick={handleRatingSubmit} className="px-3 py-1 bg-teal-600 text-white rounded">
+                    Submit
+                  </button>
+                  {userRating && (
+                    <button onClick={handleDeleteRating} className="px-3 py-1 text-sm text-red-500 underline">
+                      Remove Rating
+                    </button>
+                  )}
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Cast Section */}
         {cast.length > 0 && (
           <div className="bg-white mt-6 p-6 rounded shadow-md">
             <h2 className="text-2xl font-bold mb-4">🎭 Cast</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {cast.slice(0, 12).map(member => (
+              {cast.slice(0, 12).map((member) => (
                 <Link key={member.id} href={`/person/${member.id}`}>
                   <div className="text-center hover:shadow-lg bg-gray-50 p-2 rounded">
                     {member.profile_path ? (
@@ -189,6 +289,52 @@ const MovieDetailPage = () => {
             </div>
           </div>
         )}
+
+        <div className="bg-white mt-6 p-6 rounded shadow-md">
+          <h2 className="text-xl font-bold mb-2">💬 Comments</h2>
+          {token && (
+            <div className="mb-4">
+              <textarea
+                className="w-full border p-2 rounded mb-2"
+                rows={3}
+                placeholder="Leave a comment..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <button onClick={handleCommentSubmit} className="px-4 py-2 bg-teal-600 text-white rounded">
+                Post Comment
+              </button>
+            </div>
+          )}
+          {comments.length === 0 ? (
+            <p className="text-gray-500 italic">No comments yet.</p>
+          ) : (
+            <ul className="space-y-4">
+              {comments.map((comment) => {
+                const canDelete = userId && String(userId) === String(comment.userId);
+                return (
+                  <li key={comment._id} className="bg-gray-50 p-3 rounded shadow-sm">
+                    <div className="flex justify-between items-center">
+                      <p className="font-semibold">{comment.username}</p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(comment.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <p className="text-gray-700 mt-1">{comment.text}</p>
+                    {canDelete && (
+                      <button
+                        onClick={() => handleDeleteComment(comment._id)}
+                        className="text-red-500 text-sm mt-1 underline"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );
