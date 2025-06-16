@@ -69,14 +69,24 @@ export default function Header() {
           <div ref={moviesRef} className="relative">
             <button
               onClick={() => setIsMoviesOpen((prev) => !prev)}
-              className={`${styles.link} cursor-pointer`}
+              className={styles.link}
             >
               Movies
             </button>
             {isMoviesOpen && (
-              <div className="absolute mt-2 bg-teal-500 rounded shadow-md flex flex-col z-10 min-w-[160px]">
-                <Link href="/popularMovies" className={styles.link}>Popular</Link>
-                <Link href="/highestRatedMovies" className={styles.link}>Top Rated</Link>
+              <div className="absolute mt-2 bg-white rounded-md shadow-lg z-10 min-w-[180px] overflow-hidden border border-gray-200">
+                <Link
+                  href="/popularMovies"
+                  className="block px-4 py-2 text-teal-800 hover:bg-gray-100 hover:text-teal-900 transition"
+                >
+                  Popular
+                </Link>
+                <Link
+                  href="/highestRatedMovies"
+                  className="block px-4 py-2 text-teal-800 hover:bg-gray-100 hover:text-teal-900 transition"
+                >
+                  Top Rated
+                </Link>
               </div>
             )}
           </div>
@@ -85,17 +95,28 @@ export default function Header() {
           <div ref={tvRef} className="relative">
             <button
               onClick={() => setIsTvOpen((prev) => !prev)}
-              className={`${styles.link} cursor-pointer`}
+              className={styles.link}
             >
               TV Shows
             </button>
             {isTvOpen && (
-              <div className="absolute mt-2 bg-teal-500 rounded shadow-md flex flex-col z-10 min-w-[160px]">
-                <Link href="/popularTv" className={styles.link}>Popular</Link>
-                <Link href="/highestRatedTv" className={styles.link}>Top Rated</Link>
+              <div className="absolute mt-2 bg-white rounded-md shadow-lg z-10 min-w-[180px] overflow-hidden border border-gray-200">
+                <Link
+                  href="/popularTv"
+                  className="block px-4 py-2 text-teal-800 hover:bg-gray-100 hover:text-teal-900 transition"
+                >
+                  Popular
+                </Link>
+                <Link
+                  href="/highestRatedTv"
+                  className="block px-4 py-2 text-teal-800 hover:bg-gray-100 hover:text-teal-900 transition"
+                >
+                  Top Rated
+                </Link>
               </div>
             )}
           </div>
+
 
           <NavLink href="/popularPeople">Popular People</NavLink>
           <NavLink href="/aboutUs">About</NavLink>
