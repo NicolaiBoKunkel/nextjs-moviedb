@@ -123,7 +123,7 @@ const MovieDetailPage = () => {
 
             <button
               onClick={toggleFavorite}
-              className={`mt-4 px-4 py-2 rounded font-semibold transition ${
+              className={`mt-4 px-4 py-2 rounded font-semibold transition hover:bg-red-300 ${
                 isFavorite ? "bg-red-500 text-white" : "bg-gray-200"
               }`}
             >

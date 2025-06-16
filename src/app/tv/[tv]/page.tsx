@@ -131,7 +131,7 @@ const TvDetailPage = () => {
 
             <button
               onClick={toggleFavorite}
-              className={`mt-4 px-4 py-2 rounded font-semibold transition ${
+              className={`mt-4 px-4 py-2 rounded font-semibold transition hover:bg-red-300 ${
                 isFavorite ? "bg-red-500 text-white" : "bg-gray-200"
               }`}
             >
@@ -141,7 +141,7 @@ const TvDetailPage = () => {
             {trailerKey && (
               <button
                 onClick={() => window.open(`https://www.youtube.com/watch?v=${trailerKey}`)}
-                className="ml-4 px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700"
+                className="ml-4 px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 transition"
               >
                 ▶️ Watch Trailer
               </button>
