@@ -1,76 +1,39 @@
-let token: string;
-
-describe('Realistic Media Favorite Flow', () => {
-  before(() => {
-    cy.visit('/login');
-    cy.get('input[placeholder="Email"]').type('test@test.dk');
-    cy.get('input[placeholder="Password"]').type('test');
-    cy.get('button[type="submit"]').click();
-
-    // ✅ Wait for correct redirect and profile render
-    cy.url({ timeout: 10000 }).should('include', '/user/');
-    cy.contains('👤 Profile: test', { timeout: 10000 }).should('exist');
-
-    cy.window().then((win) => {
-      token = win.localStorage.getItem('token')!;
-    });
-  });
-
-
+describe('Media Cast Navigation Flow', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.window().then((win) => {
-      win.localStorage.setItem('token', token);
-    });
   });
 
-  it('searches for a movie and favorites it from the detail page', () => {
+  it('searches for Star Wars and visits Mark Hamill’s actor page', () => {
     cy.get('input[placeholder="Search for Movies or TV Shows..."]').type('Star Wars');
     cy.contains('Star Wars').click();
+
     cy.url().should('include', '/movie/');
     cy.contains('Star Wars').should('exist');
+    cy.contains('Cast').scrollIntoView();
 
-    cy.get('button')
-      .contains(/Add to Favorites|Remove from Favorites/)
-      .then(($btn) => {
-        cy.wrap($btn).click();
-        cy.get('button').should('contain.text', '★ Remove from Favorites');
-      });
+    cy.contains('Mark Hamill').should('be.visible').click();
+
+    cy.url().should('include', '/person/');
+    cy.contains('Mark Hamill').should('exist');
+    cy.contains('Biography').should('exist');
+    cy.contains('Known For').should('exist');
+    cy.get('img').should('have.length.greaterThan', 0);
   });
 
-  it('searches for a TV show and favorites it from the detail page', () => {
+  it('searches for Breaking Bad and visits Bryan Cranston’s actor page', () => {
     cy.get('input[placeholder="Search for Movies or TV Shows..."]').type('Breaking Bad');
     cy.contains('Breaking Bad').click();
+
     cy.url().should('include', '/tv/');
     cy.contains('Breaking Bad').should('exist');
+    cy.contains('Cast').scrollIntoView();
 
-    cy.get('button')
-      .contains(/Add to Favorites|Remove from Favorites/)
-      .then(($btn) => {
-        cy.wrap($btn).click();
-        cy.get('button').should('contain.text', '★ Remove from Favorites');
-      });
-  });
+    cy.contains('Bryan Cranston').should('be.visible').click();
 
-  it('shows favorited media on the user profile page via header link', () => {
-    cy.visit('/', {
-      onBeforeLoad(win) {
-        win.localStorage.setItem('token', token);
-      },
-    });
-
-    cy.contains('Welcome, test!').click();
-    cy.url().should('include', '/user/test');
-    cy.contains('👤 Profile: test').should('exist');
-    cy.contains('test@test.dk').should('exist');
-    cy.contains('Star Wars').should('exist');
-    cy.contains('Breaking Bad').should('exist');
-
-    cy.contains('Star Wars').click();
-    cy.url().should('include', '/movie/');
-    cy.go('back');
-
-    cy.contains('Breaking Bad').click();
-    cy.url().should('include', '/tv/');
+    cy.url().should('include', '/person/');
+    cy.contains('Bryan Cranston').should('exist');
+    cy.contains('Biography').should('exist');
+    cy.contains('Known For').should('exist');
+    cy.get('img').should('have.length.greaterThan', 0);
   });
 });
