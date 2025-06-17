@@ -28,6 +28,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Wake up Render backend
+        run: curl https://nextjs-movie-backend-gfda.onrender.com/api/movies/popular || true
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
