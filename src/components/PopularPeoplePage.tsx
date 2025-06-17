@@ -46,7 +46,7 @@ const PopularPeoplePage = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Popular People</h1>
+      <h1 className="text-3xl font-bold text-center bg-teal-100 text-teal-800 px-6 py-3 rounded shadow mb-6">Popular People</h1>
 
       {error && <p className="text-red-500">{error}</p>}
 

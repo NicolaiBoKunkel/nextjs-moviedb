@@ -60,7 +60,6 @@ const MovieDetailPage = () => {
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
-  // ✅ Fetch user data first to ensure userId is set before rendering comments
   useEffect(() => {
     if (!token) return;
 
@@ -75,7 +74,6 @@ const MovieDetailPage = () => {
       .catch(() => {});
   }, [token]);
 
-  // ✅ Load movie and related data
   useEffect(() => {
     if (!id) return;
 
