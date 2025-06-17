@@ -57,7 +57,6 @@ const PopularPeoplePage = () => {
       </div>
 
       <div className="flex flex-col items-center mt-8">
-        <p className="text-gray-600 mb-2">Page {page}</p>
         <button
           onClick={() => setPage((prev) => prev + 1)}
           className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded"
