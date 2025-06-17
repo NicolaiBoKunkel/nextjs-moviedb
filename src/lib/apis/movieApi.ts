@@ -43,12 +43,15 @@ export interface TMDBResponse<T> {
 
 // Internal fetcher
 const fetcher = async (url: string) => {
+  console.log("🔍 Fetching:", url); // Add this for GitHub logs
   const response = await fetch(url);
   if (!response.ok) {
+    console.error("❌ Failed response from:", url, response.status);
     throw new Error("An error occurred while trying to fetch the data.");
   }
   return await response.json();
 };
+
 
 // Popular Movies
 export const getPopularMovies = async (page: number = 1): Promise<TMDBResponse<Movie>> => {
