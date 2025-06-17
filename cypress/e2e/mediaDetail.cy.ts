@@ -7,12 +7,15 @@ describe('Realistic Media Favorite Flow', () => {
     cy.get('input[placeholder="Password"]').type('test');
     cy.get('button[type="submit"]').click();
 
-    cy.contains('Welcome, test!', { timeout: 10000 }).should('exist');
+    // ✅ Wait for correct redirect and profile render
+    cy.url({ timeout: 10000 }).should('include', '/user/');
+    cy.contains('👤 Profile: test', { timeout: 10000 }).should('exist');
 
     cy.window().then((win) => {
       token = win.localStorage.getItem('token')!;
     });
   });
+
 
   beforeEach(() => {
     cy.visit('/');
