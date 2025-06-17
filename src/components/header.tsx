@@ -74,7 +74,7 @@ export default function Header() {
               Movies
             </button>
             {isMoviesOpen && (
-              <div className="absolute mt-2 bg-white rounded-md shadow-lg z-10 min-w-[180px] overflow-hidden border border-gray-200">
+              <div className="absolute mt-2 bg-white rounded-md shadow-lg z-50 min-w-[180px] overflow-hidden border border-gray-200">
                 <Link
                   href="/popularMovies"
                   className="block px-4 py-2 text-teal-800 hover:bg-gray-100 hover:text-teal-900 transition"
@@ -100,7 +100,7 @@ export default function Header() {
               TV Shows
             </button>
             {isTvOpen && (
-              <div className="absolute mt-2 bg-white rounded-md shadow-lg z-10 min-w-[180px] overflow-hidden border border-gray-200">
+              <div className="absolute mt-2 bg-white rounded-md shadow-lg z-50 min-w-[180px] overflow-hidden border border-gray-200">
                 <Link
                   href="/popularTv"
                   className="block px-4 py-2 text-teal-800 hover:bg-gray-100 hover:text-teal-900 transition"

@@ -13,17 +13,17 @@ interface Person {
 const PersonCard = ({ person }: { person: Person }) => {
   const imageUrl = person.profile_path
     ? `https://image.tmdb.org/t/p/original${person.profile_path}`
-    : '/no-profile.png'; // fallback image if no profile
+    : '/no-profile.png';
 
   return (
-    <div className="max-w-xs rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition">
+    <div className="max-w-xs rounded overflow-hidden shadow-lg bg-white transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
       <Link href={`/person/${person.id}`}>
         <div className="relative w-[185px] h-[278px] mx-auto mt-4">
           <Image
             src={imageUrl}
             alt={person.name}
             fill
-            className="object-cover rounded"
+            className="object-cover rounded transition-opacity duration-300 hover:opacity-90"
             sizes="(max-width: 640px) 100vw, 185px"
           />
         </div>

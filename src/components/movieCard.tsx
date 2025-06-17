@@ -71,17 +71,17 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
   };
 
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100">
+    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
       <div className="px-6 py-4">
         <Link href={`/movie/${movie.id}`}>
           <div className="w-[185px] h-[278px] relative">
-            <Image
-              src={posterBasePath + movie.poster_path}
-              alt={movie.title}
-              fill
-              className="object-contain rounded"
-              sizes="(max-width: 640px) 100vw, 185px"
-            />
+          <Image
+            src={posterBasePath + movie.poster_path}
+            alt={movie.title}
+            fill
+            className="object-contain rounded transition-opacity duration-300 hover:opacity-90"
+            sizes="(max-width: 640px) 100vw, 185px"
+          />
           </div>
         </Link>
         <div className="mt-4">

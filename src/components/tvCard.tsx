@@ -27,9 +27,7 @@ const TvCard = ({ tv }: { tv: Tv }) => {
     fetch(`${baseUrl}/tv/${tv.id}/trailer`)
       .then(res => res.json())
       .then(data => {
-        if (data.trailerKey) {
-          setTrailerKey(data.trailerKey);
-        }
+        if (data.trailerKey) setTrailerKey(data.trailerKey);
       })
       .catch(error => console.log('Error fetching trailer:', error));
 
@@ -73,7 +71,7 @@ const TvCard = ({ tv }: { tv: Tv }) => {
   };
 
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100">
+    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-teal-100 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
       <div className="px-6 py-4">
         <Link href={`/tv/${tv.id}`}>
           <div className="w-[185px] h-[278px] relative">
@@ -81,16 +79,14 @@ const TvCard = ({ tv }: { tv: Tv }) => {
               src={posterBasePath + tv.poster_path}
               alt={tv.original_name}
               fill
-              className="object-contain rounded"
+              className="object-contain rounded transition-opacity duration-300 hover:opacity-90"
               sizes="(max-width: 640px) 100vw, 185px"
             />
           </div>
         </Link>
         <div className="mt-4">
           <Link href={`/tv/${tv.id}`}>
-            <h5 className="font-bold text-xl mb-2">
-              {tv.original_name.substring(0, 200)}
-            </h5>
+            <h5 className="font-bold text-xl mb-2">{tv.original_name.substring(0, 200)}</h5>
           </Link>
           <div className="flex items-center mb-2">
             <svg className="w-4 h-4 text-yellow-300 me-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">

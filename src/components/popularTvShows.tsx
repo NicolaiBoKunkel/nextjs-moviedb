@@ -1,9 +1,12 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getPopularTvShows, Tv } from "@/lib/apis/movieApi";
 import TvCard from "./tvCard";
+
+import homeImg from '/public/home.jpg';
+import ParallaxPage from "@/components/ParallaxPage";
 
 interface TMDBResponse<T> {
   page: number;
@@ -46,8 +49,7 @@ const PopularTvShows = () => {
   if (isLoading || !data) return <div>Loading...</div>;
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-center bg-teal-100 text-teal-800 px-6 py-3 rounded shadow mb-6">Popular TV Shows</h1>
+    <ParallaxPage backgroundImage={homeImg.src} title="Popular TV Shows">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {data.results.map((tvShow) => (
           <TvCard key={tvShow.id} tv={tvShow} />
@@ -73,7 +75,7 @@ const PopularTvShows = () => {
           Next
         </button>
       </div>
-    </div>
+    </ParallaxPage>
   );
 };
 
