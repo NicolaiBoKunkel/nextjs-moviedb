@@ -9,9 +9,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    env:
-      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+  env:
+    NEXT_PUBLIC_API_URL: https://nextjs-movie-backend-gfda.onrender.com/api
 
+  
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
