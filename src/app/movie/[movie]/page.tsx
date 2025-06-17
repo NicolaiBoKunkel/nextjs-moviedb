@@ -182,18 +182,17 @@ const MovieDetailPage = () => {
   if (!movie) return <div className="text-center py-10 text-gray-500">Loading...</div>;
 
   return (
-    <div className="relative w-full bg-gray-100 min-h-screen">
-      {movie.backdrop_path && (
-        <div
-          className="w-full h-[400px] bg-cover bg-center brightness-75"
-          style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
-          }}
-        />
-      )}
-
-      <div className={`max-w-5xl mx-auto px-4 ${movie.backdrop_path ? '-mt-48' : 'pt-10'} relative z-10`}>
-        <div className="flex flex-col md:flex-row bg-white shadow-xl rounded-lg overflow-hidden">
+    <div
+      className="relative w-full min-h-screen bg-cover bg-top bg-fixed"
+      style={{
+        backgroundImage: movie.backdrop_path
+          ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+          : undefined,
+        backgroundColor: '#f3f4f6',
+      }}
+    >
+      <div className={`max-w-5xl mx-auto px-4 ${movie.backdrop_path ? 'pt-52' : 'pt-10'} relative z-10`}>
+        <div className="flex flex-col md:flex-row backdrop-blur-sm bg-white/80 shadow-xl rounded-lg overflow-hidden">
           <div className="relative w-full md:w-1/3 h-[450px]">
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -264,7 +263,7 @@ const MovieDetailPage = () => {
         </div>
 
         {cast.length > 0 && (
-          <div className="bg-white mt-6 p-6 rounded shadow-md">
+          <div className="backdrop-blur-sm bg-white/80 mt-6 p-6 rounded shadow-md">
             <h2 className="text-2xl font-bold mb-4">🎭 Cast</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {cast.slice(0, 12).map((member) => (
@@ -290,7 +289,7 @@ const MovieDetailPage = () => {
           </div>
         )}
 
-        <div className="bg-white mt-6 p-6 rounded shadow-md">
+        <div className="backdrop-blur-sm bg-white/80 mt-6 p-6 rounded shadow-md">
           <h2 className="text-xl font-bold mb-2">💬 Comments</h2>
           {token && (
             <div className="mb-4">
