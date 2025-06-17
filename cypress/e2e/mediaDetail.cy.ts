@@ -8,10 +8,13 @@ describe('Realistic Media Favorite Flow', () => {
     cy.get('button[type="submit"]').click();
 
     cy.url().should('include', '/user/');
+    cy.contains('👤 Profile: test').should('exist');
+
     cy.window().then((win) => {
       token = win.localStorage.getItem('token')!;
     });
   });
+
 
   beforeEach(() => {
     cy.visit('/');
@@ -32,31 +35,27 @@ describe('Realistic Media Favorite Flow', () => {
         const initialText = $btn.text();
         cy.wrap($btn).click();
 
-        // Confirm that it switched to "Remove from Favorites"
-        cy.get('button')
-          .should('contain.text', '★ Remove from Favorites');
+        // ✅ Confirm the button now shows unfavorite text
+        cy.get('button').should('contain.text', '★ Remove from Favorites');
       });
   });
 
+  it('searches for a TV show and favorites it from the detail page', () => {
+    cy.get('input[placeholder="Search for Movies or TV Shows..."]').type('Breaking Bad');
+    cy.contains('Breaking Bad').click();
+    cy.url().should('include', '/tv/');
+    cy.contains('Breaking Bad').should('exist');
 
-it('searches for a TV show and favorites it from the detail page', () => {
-  cy.get('input[placeholder="Search for Movies or TV Shows..."]').type('Breaking Bad');
-  cy.contains('Breaking Bad').click();
-  cy.url().should('include', '/tv/');
-  cy.contains('Breaking Bad').should('exist');
+    cy.get('button')
+      .contains(/Add to Favorites|Remove from Favorites/)
+      .then(($btn) => {
+        const initialText = $btn.text();
+        cy.wrap($btn).click();
 
-  cy.get('button')
-    .contains(/Add to Favorites|Remove from Favorites/)
-    .then(($btn) => {
-      const initialText = $btn.text();
-      cy.wrap($btn).click();
-
-      // Confirm that it switched to "Remove from Favorites"
-      cy.get('button')
-        .should('contain.text', '★ Remove from Favorites');
-    });
-});
-
+        // ✅ Confirm the button now shows unfavorite text
+        cy.get('button').should('contain.text', '★ Remove from Favorites');
+      });
+  });
 
   it('shows favorited media on the user profile page via header link', () => {
     // Visit home where the header is visible
