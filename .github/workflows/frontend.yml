@@ -9,6 +9,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    env:
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -31,4 +34,5 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 60
         env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           CYPRESS_baseUrl: http://localhost:3000
