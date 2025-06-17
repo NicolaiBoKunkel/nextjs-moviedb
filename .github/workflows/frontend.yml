@@ -24,20 +24,6 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build
-        run: npm run build
-
-      - name: Start dev server
-        run: npm run dev &
-        env:
-          PORT: 3000
-
-      - name: Wait for app to be ready
-        uses: jakejarvis/wait-action@v0.1.1
-        with:
-          url: http://localhost:3000
-          timeout:
-
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
