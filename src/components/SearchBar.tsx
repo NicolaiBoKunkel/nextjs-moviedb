@@ -83,7 +83,7 @@ const SearchBar = () => {
       {error && <div className="text-red-500 mt-2">{error}</div>}
 
       {showSuggestions && results.length > 0 && (
-        <ul className="absolute left-0 right-0 z-10 bg-white border rounded shadow mt-2 max-h-96 overflow-y-auto">
+        <ul className="absolute left-0 right-0 z-50 bg-white border rounded shadow mt-2 max-h-96 overflow-y-auto">
           {results.map((item) => (
             <li
               key={`${item.media_type}-${item.id}`}

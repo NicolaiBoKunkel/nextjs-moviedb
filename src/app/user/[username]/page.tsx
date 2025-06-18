@@ -8,7 +8,7 @@ import { getCurrentUser } from '@/lib/apis/authApi';
 import { getFavorites } from '@/lib/apis/favoriteApi';
 import { deleteAccount } from '@/lib/apis/userApi';
 
-const TMDB_API_KEY = 'e46278258cc52ec12ec6d0d0582c89b7';
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 export default function UserProfilePage() {
   const { username } = useParams();
@@ -29,7 +29,7 @@ export default function UserProfilePage() {
         const detailedFavorites = await Promise.all(
           favData.favorites.map(async (fav: { mediaId: number; mediaType: string }) => {
             try {
-              const res = await fetch(`https://api.themoviedb.org/3/${fav.mediaType}/${fav.mediaId}?api_key=${TMDB_API_KEY}`);
+              const res = await fetch(`${baseUrl}/${fav.mediaType === "movie" ? "movies" : "tv"}/${fav.mediaId}/details`);
               const data = await res.json();
               return { ...data, mediaType: fav.mediaType };
             } catch {
