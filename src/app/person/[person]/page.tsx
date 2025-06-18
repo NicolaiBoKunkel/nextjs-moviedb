@@ -23,7 +23,6 @@ interface Credit {
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-const tmdbBaseUrl = 'https://api.themoviedb.org/3';
 const imageBase = 'https://image.tmdb.org/t/p/original/';
 
 async function fetchCredits(personId: string): Promise<Credit[]> {
