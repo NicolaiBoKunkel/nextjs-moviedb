@@ -2,9 +2,10 @@ describe('Homepage Intro Content', () => {
   it('displays headline and sections for movies and TV shows', () => {
     cy.visit('/');
 
-    cy.contains('h1', 'TMDB with Next.js').should('be.visible');
-    cy.contains('h2', 'Fresh selection of Movies for you').should('be.visible');
-    cy.contains('h2', 'Fresh selection of TV Shows for you').should('be.visible');
+    // Wait for hydration to complete (i.e. React takes over)
+    cy.get('h1', { timeout: 10000 }).should('have.text', 'TMDB with Next.js');
+    cy.get('h2').contains('Fresh selection of Movies for you').should('be.visible');
+    cy.get('h2').contains('Fresh selection of TV Shows for you').should('be.visible');
   });
 });
 
@@ -12,7 +13,9 @@ describe('The Godfather Detail Page -> Actor Navigation', () => {
   it('visits The Godfather page and navigates to Marlon Brando', () => {
     cy.visit('/movie/238');
 
-    cy.contains('The Godfather').should('exist');
+    // Wait for headline text after hydration
+    cy.get('h1').contains('The Godfather', { timeout: 10000 }).should('exist');
+
     cy.contains('“An offer you can\'t refuse.”').should('exist');
     cy.contains('Spanning the years 1945 to 1955').should('exist');
     cy.contains('Release Date: 1972-03-14').should('exist');
@@ -39,7 +42,9 @@ describe('Breaking Bad Detail Page -> Actor Navigation', () => {
   it('visits Breaking Bad page and navigates to Bryan Cranston', () => {
     cy.visit('/tv/1396');
 
-    cy.contains('Breaking Bad').should('exist');
+    // Wait for hydration
+    cy.get('h1').contains('Breaking Bad', { timeout: 10000 }).should('exist');
+
     cy.contains('“Change the equation.”').should('exist');
     cy.contains('Walter White').should('exist');
     cy.contains('First Air Date: 2008-01-20').should('exist');
