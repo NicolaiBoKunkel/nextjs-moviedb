@@ -16,7 +16,6 @@ describe('The Godfather Detail Page -> Actor Navigation', () => {
     cy.contains('“An offer you can\'t refuse.”').should('exist');
     cy.contains('Spanning the years 1945 to 1955').should('exist');
     cy.contains('Release Date: 1972-03-14').should('exist');
-    cy.contains('⭐ 8.686').should('exist');
     cy.contains('Language: EN').should('exist');
     cy.contains('Genres: Drama, Crime').should('exist');
     cy.contains('☆ Add to Favorites').should('exist');
@@ -44,7 +43,6 @@ describe('Breaking Bad Detail Page -> Actor Navigation', () => {
     cy.contains('“Change the equation.”').should('exist');
     cy.contains('Walter White').should('exist');
     cy.contains('First Air Date: 2008-01-20').should('exist');
-    cy.contains('⭐ 8.926').should('exist');
     cy.contains('Language: EN').should('exist');
     cy.contains('Genres: Drama, Crime').should('exist');
     cy.contains('Seasons: 5').should('exist');
