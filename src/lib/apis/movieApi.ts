@@ -80,3 +80,14 @@ export const getPopularPeople = async (page: number = 1): Promise<TMDBResponse<P
 export const searchMedia = async (query: string) => {
   return await fetcher(`${baseUrl}/search?q=${encodeURIComponent(query)}`);
 };
+
+
+// Discover Movies
+export const getDiscoveredMovies = async (): Promise<Movie[]> => {
+  return await fetcher(`${baseUrl}/discover/movies`);
+};
+
+// Discover TV Shows
+export const getDiscoveredTvShows = async (): Promise<Tv[]> => {
+  return await fetcher(`${baseUrl}/discover/tv`);
+};
