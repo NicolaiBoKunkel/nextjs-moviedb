@@ -16,7 +16,13 @@ interface Movie {
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-const MovieCard = ({ movie }: { movie: Movie }) => {
+const MovieCard = ({
+  movie,
+  onFavoriteToggled,
+}: {
+  movie: Movie;
+  onFavoriteToggled?: () => void;
+}) => {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -65,6 +71,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
         await addFavorite(movie.id, "movie", token);
       }
       setIsFavorite(!isFavorite);
+      if (onFavoriteToggled) onFavoriteToggled();
     } catch (err) {
       console.error("Failed to toggle favorite:", err);
     }
@@ -75,13 +82,13 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
       <div className="px-6 py-4">
         <Link href={`/movie/${movie.id}`}>
           <div className="w-[185px] h-[278px] relative">
-          <Image
-            src={posterBasePath + movie.poster_path}
-            alt={movie.title}
-            fill
-            className="object-contain rounded transition-opacity duration-300 hover:opacity-90"
-            sizes="(max-width: 640px) 100vw, 185px"
-          />
+            <Image
+              src={posterBasePath + movie.poster_path}
+              alt={movie.title}
+              fill
+              className="object-contain rounded transition-opacity duration-300 hover:opacity-90"
+              sizes="(max-width: 640px) 100vw, 185px"
+            />
           </div>
         </Link>
         <div className="mt-4">
@@ -94,9 +101,11 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
             </svg>
             <span className="ml-1">{movie.vote_average}</span>
           </div>
-          <p className="text-gray-700">{movie.overview.substring(0, 125).concat('....')}</p>
+          <p className="text-gray-700">
+            {movie.overview.substring(0, 125).concat('....')}
+          </p>
           <div className="flex justify-between items-center mt-4">
-            <span className="fas fa-calendar-alt text-gray-500">{movie.release_date}</span>
+            <span className="text-gray-500">{movie.release_date}</span>
             <div className="flex gap-2">
               <button
                 className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-1 px-3 rounded"

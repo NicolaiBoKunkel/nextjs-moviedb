@@ -16,7 +16,13 @@ interface Tv {
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-const TvCard = ({ tv }: { tv: Tv }) => {
+const TvCard = ({
+  tv,
+  onFavoriteToggled,
+}: {
+  tv: Tv;
+  onFavoriteToggled?: () => void;
+}) => {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -65,6 +71,7 @@ const TvCard = ({ tv }: { tv: Tv }) => {
         await addFavorite(tv.id, "tv", token);
       }
       setIsFavorite(!isFavorite);
+      if (onFavoriteToggled) onFavoriteToggled();
     } catch (err) {
       console.error("Failed to toggle favorite:", err);
     }
@@ -86,7 +93,9 @@ const TvCard = ({ tv }: { tv: Tv }) => {
         </Link>
         <div className="mt-4">
           <Link href={`/tv/${tv.id}`}>
-            <h5 className="font-bold text-xl mb-2">{tv.original_name.substring(0, 200)}</h5>
+            <h5 className="font-bold text-xl mb-2">
+              {tv.original_name.substring(0, 200)}
+            </h5>
           </Link>
           <div className="flex items-center mb-2">
             <svg className="w-4 h-4 text-yellow-300 me-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
@@ -94,7 +103,9 @@ const TvCard = ({ tv }: { tv: Tv }) => {
             </svg>
             <span className="ml-1">{tv.vote_average}</span>
           </div>
-          <p className="text-gray-700">{tv.overview.substring(0, 125).concat('....')}</p>
+          <p className="text-gray-700">
+            {tv.overview.substring(0, 125).concat('....')}
+          </p>
           <div className="flex justify-between items-center mt-4">
             <span className="text-gray-500">{tv.first_air_date}</span>
             <div className="flex gap-2">
