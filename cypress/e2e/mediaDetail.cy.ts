@@ -4,20 +4,38 @@ describe('Media Cast Navigation Flow', () => {
   });
 
   it('searches for Star Wars and visits Mark Hamill’s actor page', () => {
-    cy.get('input[placeholder="Search for Movies or TV Shows..."]', { timeout: 10000 }).should('exist').type('Star Wars');
+    cy.get('input[placeholder="Search for Movies or TV Shows..."]', { timeout: 10000 })
+      .scrollIntoView()
+      .type('Star Wars');
 
-    // Wait for and click search result
     cy.contains('Star Wars', { timeout: 15000 }).should('be.visible').click();
 
-    // Wait for navigation
     cy.url({ timeout: 10000 }).should('include', '/movie/');
     cy.contains('Star Wars', { timeout: 10000 }).should('exist');
-    cy.contains('Cast', { timeout: 10000 }).scrollIntoView();
+    cy.contains('Cast').scrollIntoView();
 
-    cy.contains('Mark Hamill', { timeout: 15000 }).should('be.visible').click();
+    cy.contains('Mark Hamill', { timeout: 10000 }).should('be.visible').click();
     cy.url({ timeout: 10000 }).should('include', '/person/');
     cy.contains('Mark Hamill', { timeout: 10000 }).should('exist');
-    cy.contains('Biography').should('exist');
-    cy.contains('Known For').should('exist');
+    cy.contains('Biography', { timeout: 10000 }).should('exist');
+    cy.contains('Known For', { timeout: 10000 }).should('exist');
+  });
+
+  it('searches for Breaking Bad and visits Bryan Cranston’s actor page', () => {
+    cy.get('input[placeholder="Search for Movies or TV Shows..."]', { timeout: 10000 })
+      .scrollIntoView()
+      .type('Breaking Bad');
+
+    cy.contains('Breaking Bad', { timeout: 15000 }).should('be.visible').click();
+
+    cy.url({ timeout: 10000 }).should('include', '/tv/');
+    cy.contains('Breaking Bad', { timeout: 10000 }).should('exist');
+    cy.contains('Cast').scrollIntoView();
+
+    cy.contains('Bryan Cranston', { timeout: 10000 }).should('be.visible').click();
+    cy.url({ timeout: 10000 }).should('include', '/person/');
+    cy.contains('Bryan Cranston', { timeout: 10000 }).should('exist');
+    cy.contains('Biography', { timeout: 10000 }).should('exist');
+    cy.contains('Known For', { timeout: 10000 }).should('exist');
   });
 });
