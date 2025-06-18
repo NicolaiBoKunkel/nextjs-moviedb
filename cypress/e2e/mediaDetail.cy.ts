@@ -1,27 +1,89 @@
-describe('Media Cast Navigation Flow (Direct IDs)', () => {
-  it('visits Star Wars (movie ID 11) and Mark Hamill’s actor page (person ID 2)', () => {
-    cy.visit('/movie/11');
+describe('Homepage Intro Content', () => {
+  it('displays headline and sections for movies and TV shows', () => {
+    cy.visit('/');
 
-    cy.contains('Star Wars').should('exist');
-    cy.contains('Cast').scrollIntoView();
+    cy.contains('h1', 'TMDB with Next.js').should('be.visible');
 
-    cy.contains('Mark Hamill').should('be.visible').click();
-    cy.url().should('include', '/person/2');
-    cy.contains('Mark Hamill').should('exist');
-    cy.contains('Biography').should('exist');
-    cy.contains('Known For').should('exist');
+    cy.contains('h2', 'Fresh selection of Movies for you').should('be.visible');
+    cy.contains('h2', 'Fresh selection of TV Shows for you').should('be.visible');
   });
+});
 
-  it('visits Breaking Bad (TV ID 1396) and Bryan Cranston’s actor page (person ID 17419)', () => {
-    cy.visit('/tv/1396');
+describe('Top Rated Movie -> Detail Page -> Actor Navigation', () => {
+  it('navigates to The Godfather, verifies details, and clicks Marlon Brando', () => {
+    cy.visit('/');
 
+    cy.contains('button', 'Movies').click();
+    cy.contains('a', 'Top Rated').click();
+
+    cy.url().should('include', '/highestRatedMovies');
+    cy.contains('Highest Rated Movies').should('exist');
+
+    cy.contains('.font-bold', 'The Godfather')
+      .should('be.visible')
+      .click();
+
+    cy.url().should('include', '/movie/238');
+    cy.contains('The Godfather').should('exist');
+    cy.contains('“An offer you can\'t refuse.”').should('exist');
+    cy.contains('Spanning the years 1945 to 1955').should('exist');
+    cy.contains('Release Date: 1972-03-14').should('exist');
+    cy.contains('⭐ 8.686').should('exist');
+    cy.contains('Language: EN').should('exist');
+    cy.contains('Genres: Drama, Crime').should('exist');
+    cy.contains('☆ Add to Favorites').should('exist');
+    cy.contains('▶️ Watch Trailer').should('exist');
+    cy.contains('🎭 Cast').scrollIntoView().should('exist');
+
+    cy.contains('Marlon Brando')
+      .scrollIntoView()
+      .should('be.visible')
+      .click();
+
+    cy.url().should('include', '/person/3084');
+    cy.contains('Marlon Brando').should('exist');
+    cy.contains('Born: 1924-04-03').should('exist');
+    cy.contains('Birthplace: Omaha, Nebraska, USA').should('exist');
+    cy.contains('Died: 2004-07-01').should('exist');
+  });
+});
+
+describe('Top Rated TV Show -> Detail Page -> Actor Navigation', () => {
+  it('navigates to Breaking Bad, verifies details, and clicks Bryan Cranston', () => {
+    cy.visit('/');
+
+    cy.contains('button', 'TV Shows').click();
+    cy.contains('a', 'Top Rated').click();
+
+    cy.url().should('include', '/highestRatedTv');
+    cy.contains('Highest Rated TV Shows').should('exist');
+
+    cy.contains('.font-bold', 'Breaking Bad')
+      .should('be.visible')
+      .click();
+
+    cy.url().should('include', '/tv/1396');
     cy.contains('Breaking Bad').should('exist');
-    cy.contains('Cast').scrollIntoView();
+    cy.contains('“Change the equation.”').should('exist');
+    cy.contains('Walter White').should('exist');
+    cy.contains('First Air Date: 2008-01-20').should('exist');
+    cy.contains('⭐ 8.926').should('exist');
+    cy.contains('Language: EN').should('exist');
+    cy.contains('Genres: Drama, Crime').should('exist');
+    cy.contains('Seasons: 5').should('exist');
+    cy.contains('Episodes: 62').should('exist');
+    cy.contains('☆ Add to Favorites').should('exist');
+    cy.contains('▶️ Watch Trailer').should('exist');
+    cy.contains('🎭 Cast').scrollIntoView().should('exist');
 
-    cy.contains('Bryan Cranston').should('be.visible').click();
+    cy.contains('Bryan Cranston')
+      .scrollIntoView()
+      .should('be.visible')
+      .click();
+
     cy.url().should('include', '/person/17419');
     cy.contains('Bryan Cranston').should('exist');
-    cy.contains('Biography').should('exist');
-    cy.contains('Known For').should('exist');
+    cy.contains('Born: 1956-03-07').should('exist');
+    cy.contains('Birthplace: Hollywood, Los Angeles, California, USA').should('exist');
   });
 });
