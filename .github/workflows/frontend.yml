@@ -11,7 +11,7 @@ jobs:
 
     env:
       NEXT_PUBLIC_API_URL: https://nextjs-movie-backend-gfda.onrender.com/api
-
+      CYPRESS_baseUrl: http://localhost:3000
 
     steps:
       - name: Checkout repo
@@ -28,8 +28,11 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Wake up Render backend
-        run: curl https://nextjs-movie-backend-gfda.onrender.com/api/movies/popular || true
+      - name: Wait for Render backend to be ready
+        uses: jakejarvis/wait-action@v0.1.0
+        with:
+          url: https://nextjs-movie-backend-gfda.onrender.com/api/movies/popular
+          timeout: 60
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
@@ -37,5 +40,3 @@ jobs:
           start: npm run dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 60
-        env:
-          CYPRESS_baseUrl: http://localhost:3000
