@@ -60,6 +60,8 @@ export default function MovieDetailClient({
 }: Props) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [userRating, setUserRating] = useState<number | null>(null);
+  const [average, setAverage] = useState<number | null>(averageRating);
+  const [count, setCount] = useState<number>(ratingCount);
   const [allComments, setAllComments] = useState(comments);
   const [newComment, setNewComment] = useState('');
   const [username, setUsername] = useState<string | null>(null);
@@ -87,6 +89,18 @@ export default function MovieDetailClient({
     });
   }, [token, movie.id]);
 
+  const fetchRatingStats = async () => {
+    const res = await fetch(`${baseUrl}/ratings/movie/${movie.id}`);
+    const data = await res.json();
+    setAverage(data.average);
+    setCount(data.count);
+  };
+
+    useEffect(() => {
+    fetchRatingStats();
+  }, []);
+
+
   const toggleFavorite = async () => {
     if (!token) return alert('Please log in to favorite this movie.');
     try {
@@ -112,6 +126,7 @@ export default function MovieDetailClient({
       },
       body: JSON.stringify({ mediaId: movie.id, mediaType: 'movie', rating: userRating }),
     });
+    fetchRatingStats();
   };
 
   const handleDeleteRating = async () => {
@@ -121,6 +136,7 @@ export default function MovieDetailClient({
       headers: { Authorization: `Bearer ${token}` },
     });
     setUserRating(null);
+    fetchRatingStats();
   };
 
   const handleCommentSubmit = async () => {
@@ -178,7 +194,7 @@ export default function MovieDetailClient({
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>Release Date:</strong> {movie.release_date}</p>
               <p><strong>TMDB Rating:</strong> ⭐ {movie.vote_average}</p>
-              <p><strong>User Rating:</strong> ⭐ {averageRating ?? "N/A"} ({ratingCount} ratings)</p>
+              <p><strong>User Rating:</strong> ⭐ {average ?? "N/A"} ({count} ratings)</p>
               <p><strong>Runtime:</strong> ⏱️ {movie.runtime} minutes</p>
               <p><strong>Language:</strong> {movie.original_language?.toUpperCase() || 'N/A'}</p>
               <p><strong>Genres:</strong> {movie.genres.map((g) => g.name).join(', ')}</p>

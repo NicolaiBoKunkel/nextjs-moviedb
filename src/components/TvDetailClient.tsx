@@ -60,7 +60,17 @@ export default function TvDetailClient({ tv, trailerKey, cast, comments, average
   const [username, setUsername] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
+  const [average, setAverage] = useState<number | null>(averageRating);
+  const [count, setCount] = useState<number>(ratingCount);
+
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+  const fetchRatingStats = async () => {
+    const res = await fetch(`${baseUrl}/ratings/tv/${tv.id}`);
+    const data = await res.json();
+    setAverage(data.average);
+    setCount(data.count);
+  };
 
   useEffect(() => {
     if (!token) return;
@@ -79,6 +89,10 @@ export default function TvDetailClient({ tv, trailerKey, cast, comments, average
       setIsFavorite(data.favorites.some((f: any) => f.mediaId === tv.id && f.mediaType === 'tv'));
     });
   }, [token, tv.id]);
+
+  useEffect(() => {
+    fetchRatingStats();
+  }, []);
 
   const toggleFavorite = async () => {
     if (!token) return alert('Please log in to favorite this show.');
@@ -105,6 +119,7 @@ export default function TvDetailClient({ tv, trailerKey, cast, comments, average
       },
       body: JSON.stringify({ mediaId: tv.id, mediaType: 'tv', rating: userRating }),
     });
+    fetchRatingStats();
   };
 
   const handleDeleteRating = async () => {
@@ -114,6 +129,7 @@ export default function TvDetailClient({ tv, trailerKey, cast, comments, average
       headers: { Authorization: `Bearer ${token}` },
     });
     setUserRating(null);
+    fetchRatingStats();
   };
 
   const handleCommentSubmit = async () => {
@@ -122,8 +138,7 @@ export default function TvDetailClient({ tv, trailerKey, cast, comments, average
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+        Authorization: `Bearer ${token}` },
       body: JSON.stringify({ mediaId: tv.id, mediaType: 'tv', text: newComment }),
     });
     const data = await res.json();
@@ -168,7 +183,7 @@ export default function TvDetailClient({ tv, trailerKey, cast, comments, average
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>First Air Date:</strong> {tv.first_air_date}</p>
               <p><strong>TMDB Rating:</strong> ⭐ {tv.vote_average}</p>
-              <p><strong>User Rating:</strong> ⭐ {averageRating ?? 'N/A'} ({ratingCount} ratings)</p>
+              <p><strong>User Rating:</strong> ⭐ {average ?? 'N/A'} ({count} ratings)</p>
               <p><strong>Language:</strong> {tv.original_language?.toUpperCase()}</p>
               <p><strong>Genres:</strong> {tv.genres.map(g => g.name).join(', ')}</p>
               <p><strong>Seasons:</strong> {tv.number_of_seasons}</p>
