@@ -21,6 +21,11 @@ interface TMDBPersonResponse {
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+/**
+ * A component that fetches and displays popular people from TMDB.
+ * It includes pagination controls to navigate through the people list.
+ */
+
 const PopularPeoplePage = () => {
   const [people, setPeople] = useState<Person[]>([]);
   const [page, setPage] = useState(1);

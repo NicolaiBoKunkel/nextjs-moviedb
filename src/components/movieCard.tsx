@@ -16,6 +16,11 @@ interface Movie {
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+/**
+ * MovieCard component that displays movie details, allows users to play trailers,
+ * and toggle favorites.
+ */
+
 const MovieCard = ({
   movie,
   onFavoriteToggled,

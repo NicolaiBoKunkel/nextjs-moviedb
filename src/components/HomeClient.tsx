@@ -7,6 +7,11 @@ import TvCard from '@/components/tvCard';
 import { getDiscoveredMovies, getDiscoveredTvShows, Movie, Tv } from '@/lib/apis/movieApi';
 import homeImg from '/public/home.jpg';
 
+/**
+ * HomeClient component that fetches and displays a selection of movies and TV shows.
+ * It uses the TMDB API to get discovered movies and TV shows, displaying them in a grid format.
+ */
+
 export default function HomeClient() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [tvShows, setTvShows] = useState<Tv[]>([]);

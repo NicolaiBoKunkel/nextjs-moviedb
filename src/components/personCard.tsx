@@ -10,6 +10,11 @@ interface Person {
   known_for_department: string;
 }
 
+/**
+ * PersonCard component that displays a person's profile picture, name, and known for department.
+ * Clicking on the card navigates to the person's detail page.
+ */
+
 const PersonCard = ({ person }: { person: Person }) => {
   const imageUrl = person.profile_path
     ? `https://image.tmdb.org/t/p/original${person.profile_path}`

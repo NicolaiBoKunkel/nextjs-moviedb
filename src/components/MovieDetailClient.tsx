@@ -48,6 +48,11 @@ interface Props {
   ratingCount: number;
 }
 
+/**
+ * MovieDetailClient component that displays detailed information about a movie,
+ * including its poster, backdrop, overview, release date, genres, cast, user ratings,
+ */
+
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 export default function MovieDetailClient({

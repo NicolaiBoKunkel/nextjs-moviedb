@@ -7,6 +7,11 @@ import Image from "next/image";
 
 let debounceTimer: ReturnType<typeof setTimeout>;
 
+/**
+ * SearchBar component that allows users to search for movies or TV shows.
+ * It fetches results from the TMDB API and displays suggestions as the user types.
+ */
+
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);

@@ -15,6 +15,11 @@ interface TMDBResponse<T> {
   total_results: number;
 }
 
+/**
+ * A component that fetches and displays the highest-rated TV shows from TMDB.
+ * It includes pagination controls to navigate through the TV show list.
+ */
+
 const HighRatedTvShows = () => {
   const [data, setData] = useState<TMDBResponse<Tv> | null>(null);
   const [error, setError] = useState("");

@@ -10,6 +10,10 @@ interface HeroProps{
     description: string
 }
 
+/**
+* Hero component for displaying a full-screen background image with a title, subtitle, and description.
+*/
+
 export default function Hero(props: HeroProps){
     return(
         <div className="relative h-screen"> 

@@ -10,6 +10,10 @@ import MovieCard from '@/components/movieCard';
 import TvCard from '@/components/tvCard';
 import homeImg from '/public/home.jpg';
 
+/**
+ * UserProfilePage component displays the user's profile information,
+ */
+
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export default function UserProfilePage() {

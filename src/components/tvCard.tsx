@@ -16,6 +16,9 @@ interface Tv {
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+/**
+ * TvCard component that displays TV show details, allows users to play trailers,
+ */
 const TvCard = ({
   tv,
   onFavoriteToggled,

@@ -8,6 +8,10 @@ interface ParallaxPageProps {
   children: ReactNode;
 }
 
+/**
+ * A component that creates a parallax effect with a background image.
+ */
+
 export default function ParallaxPage({ backgroundImage, title, children }: ParallaxPageProps) {
   return (
     <div

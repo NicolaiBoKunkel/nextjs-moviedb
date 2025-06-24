@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser, registerUser, getCurrentUser } from "@/lib/apis/authApi";
 
+/**
+ * LoginClient component that handles user login and registration.
+ * It checks for an existing token in localStorage to redirect logged-in users.
+ * Users can switch between login and registration forms.
+ */
+
 export default function LoginClient() {
   const router = useRouter();
   const [isRegistering, setIsRegistering] = useState(false);

@@ -50,6 +50,11 @@ interface Props {
   ratingCount: number;
 }
 
+/**
+ * TvDetailClient component that displays detailed information about a TV show,
+ * including its poster, overview, cast, user ratings, and comments.
+ */
+
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export default function TvDetailClient({ tv, trailerKey, cast, comments, averageRating, ratingCount }: Props) {

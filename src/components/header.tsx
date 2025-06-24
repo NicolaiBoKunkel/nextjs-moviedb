@@ -9,6 +9,11 @@ import logoImg from '/public/movie_black2.jpg';
 import { getCurrentUser } from "@/lib/apis/authApi";
 import styles from './nav-link.module.css';
 
+/**
+* Header component for the application.
+* Displays the logo, navigation links, search bar, and user authentication controls.
+*/
+
 export default function Header() {
   const [user, setUser] = useState<any>(null);
   const [isMoviesOpen, setIsMoviesOpen] = useState(false);

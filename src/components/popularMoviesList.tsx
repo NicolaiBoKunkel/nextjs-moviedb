@@ -15,6 +15,11 @@ interface TMDBResponse<T> {
   total_results: number;
 }
 
+/**
+ * A component that fetches and displays popular movies from TMDB.
+ * It includes pagination controls to navigate through the movie list.
+ */
+
 const PopularMovies = () => {
   const [data, setData] = useState<TMDBResponse<Movie> | null>(null);
   const [error, setError] = useState("");
