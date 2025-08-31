@@ -16,7 +16,7 @@ describe('The Godfather Detail Page -> Actor Navigation', () => {
     // Wait for headline text after hydration
     cy.get('h1').contains('The Godfather', { timeout: 10000 }).should('exist');
 
-    //cy.contains('“An offer you can\'t refuse.”').should('exist');
+    cy.contains('“Who\'s Your (God)Daddy?”').should('exist');
     cy.contains('Spanning the years 1945 to 1955').should('exist');
     cy.contains('Release Date: 1972-03-14').should('exist');
     cy.contains('Language: EN').should('exist');
